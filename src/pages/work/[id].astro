@@ -1,0 +1,404 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { person, SITE_URL } from '../../site';
+import { getWork, formatRange, workUrl, absolute, personJsonLd, type Work } from '../../lib/work';
+
+export async function getStaticPaths() {
+  const all = await getWork();
+  return all.map((work, i) => ({
+    params: { id: work.id },
+    props: { work, newer: all[i - 1], older: all[i + 1] },
+  }));
+}
+
+interface Props {
+  work: Work;
+  newer?: Work;
+  older?: Work;
+}
+
+const { work, newer, older } = Astro.props;
+const d = work.data;
+const { Content } = await render(work);
+const url = absolute(workUrl(work));
+
+const jsonLd: object[] = [
+  personJsonLd(),
+  {
+    '@type': 'CreativeWork',
+    '@id': `${url}#work`,
+    name: d.title,
+    description: d.summary,
+    url,
+    author: { '@id': `${SITE_URL}/#person` },
+    keywords: d.tags.join(', '),
+    dateCreated: d.start,
+    sourceOrganization: { '@type': 'Organization', name: d.org, ...(d.orgUrl ? { url: d.orgUrl } : {}) },
+    ...(d.awards.length ? { award: d.awards } : {}),
+  },
+  ...d.publications.map((p) => ({
+    '@type': p.kind === 'Journal article' ? 'ScholarlyArticle' : 'CreativeWork',
+    name: p.title,
+    headline: p.title,
+    author: p.authors,
+    datePublished: p.date,
+    ...(p.kind === 'Journal article' ? { isPartOf: { '@type': 'Periodical', name: p.venue } } : { publisher: p.venue }),
+    ...(p.url ? { url: absolute(p.url) } : {}),
+  })),
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: person.name, item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: d.title, item: url },
+    ],
+  },
+];
+---
+
+<Base
+  title={`${d.title} | ${person.name}`}
+  description={d.summary}
+  jsonLd={jsonLd}
+  markdown={`/work/${work.id}.md`}
+  ogType="article"
+  page="work"
+>
+  <header slot="header" class="bar">
+    <nav class="wrap bar-inner" aria-label="Site">
+      <a class="home" href="/">Cedar Rose Leach</a>
+      <ul class="meta">
+        <li><a href="/#experience">All work</a></li>
+        <li><a href={person.resume}>Resume</a></li>
+        <li><a href={`mailto:${person.email}`}>Email</a></li>
+      </ul>
+    </nav>
+    <hr class="dot-rule" />
+  </header>
+
+  <article class="wrap project">
+    <header class="project-head">
+      <p class="meta when"><time datetime={d.start}>{formatRange(d.start, d.end)}</time></p>
+      <h1>{d.title}</h1>
+      <p class="who">
+        {d.role}, {d.orgUrl ? <a href={d.orgUrl}>{d.org}</a> : d.org}
+      </p>
+      <p class="lede">{d.summary}</p>
+    </header>
+
+    {
+      (d.supervisor || d.funding.length > 0 || d.awards.length > 0 || d.links.length > 0 || d.tags.length > 0) && (
+        <dl class="facts">
+          {d.supervisor && (
+            <div>
+              <dt>Supervisor</dt>
+              <dd>{d.supervisor}</dd>
+            </div>
+          )}
+          {d.funding.length > 0 && (
+            <div>
+              <dt>Funding</dt>
+              <dd>
+                <ul>
+                  {d.funding.map((f) => (
+                    <li>{f.url ? <a href={f.url}>{f.name}</a> : f.name}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )}
+          {d.awards.length > 0 && (
+            <div>
+              <dt>Recognition</dt>
+              <dd>
+                <ul>
+                  {d.awards.map((a) => (
+                    <li>{a}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )}
+          {d.links.length > 0 && (
+            <div>
+              <dt>Links</dt>
+              <dd>
+                <ul>
+                  {d.links.map((l) => (
+                    <li>
+                      <a href={l.url}>{l.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )}
+          {d.tags.length > 0 && (
+            <div>
+              <dt>Topics</dt>
+              <dd>{d.tags.join(', ')}</dd>
+            </div>
+          )}
+        </dl>
+      )
+    }
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    {
+      d.publications.length > 0 && (
+        <section class="pubs" aria-labelledby="pubs-title">
+          <h2 id="pubs-title">Publications</h2>
+          <ul>
+            {d.publications.map((p) => (
+              <li>
+                <p class="meta">{p.kind}</p>
+                <p>
+                  {p.authors} <cite>{p.url ? <a href={p.url}>{p.title}</a> : p.title}</cite>. {p.venue}, {p.date}.
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      d.gallery.length > 0 && (
+        <section class="gallery" aria-labelledby="gallery-title">
+          <h2 id="gallery-title">Photos and figures</h2>
+          <div class="grid">
+            {d.gallery.map((g) => (
+              <figure>
+                <div class="frame">
+                  <Image src={g.src} alt={g.alt} widths={[480, 800, 1200]} sizes="(max-width: 46rem) 92vw, 30rem" />
+                </div>
+                {g.caption && <figcaption>{g.caption}</figcaption>}
+              </figure>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <nav class="pager" aria-label="More work">
+      {
+        newer ? (
+          <a href={workUrl(newer)} rel="prev">
+            <span class="meta">Newer</span>
+            <span class="t">{newer.data.title}</span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        older && (
+          <a href={workUrl(older)} rel="next" class="older">
+            <span class="meta">Older</span>
+            <span class="t">{older.data.title}</span>
+          </a>
+        )
+      }
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .bar-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    padding-block: 1.1rem;
+  }
+  .home {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .bar ul {
+    list-style: none;
+    display: flex;
+    gap: 1.3rem;
+    margin: 0;
+    padding: 0;
+    font-size: 1.15rem;
+  }
+
+  .project-head,
+  .facts,
+  .prose,
+  .pubs {
+    max-width: 52rem;
+  }
+  .gallery {
+    max-width: 62rem;
+  }
+  .project-head {
+    padding-top: clamp(2rem, 6vw, 4rem);
+  }
+  .when {
+    margin: 0 0 0.6rem;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(2.6rem, 7vw, 4.6rem);
+    line-height: 0.95;
+    color: var(--maroon);
+  }
+  .who {
+    margin: 0.9rem 0 0;
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 1.3rem;
+    line-height: 1.3;
+  }
+  .lede {
+    margin: 1.4rem 0 0;
+    font-size: 1.3rem;
+    line-height: 1.5;
+    max-width: var(--measure);
+  }
+
+  .facts {
+    margin: 2.2rem 0 0;
+    padding: 1.2rem 1.4rem;
+    background: var(--wash);
+    border-left: 4px solid var(--amber);
+    display: grid;
+    gap: 0.9rem;
+  }
+  .facts > div {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: 0 1rem;
+  }
+  .facts dt {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--muted);
+  }
+  .facts dd {
+    margin: 0;
+  }
+  .facts ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .facts li + li {
+    margin-top: 0.4rem;
+  }
+
+  .prose {
+    margin-top: 2.5rem;
+    max-width: var(--measure);
+  }
+  .prose :global(h2) {
+    margin: 2.4rem 0 0.6rem;
+    font-size: 2rem;
+  }
+  .prose :global(h3) {
+    margin: 1.8rem 0 0.3rem;
+    font-size: 1.45rem;
+    font-weight: 600;
+    color: var(--maroon);
+  }
+  .prose :global(p),
+  .prose :global(ul) {
+    margin: 0 0 1rem;
+  }
+  .prose :global(li) {
+    margin-bottom: 0.35rem;
+  }
+
+  .pubs,
+  .gallery {
+    margin-top: 3rem;
+  }
+  .pubs h2,
+  .gallery h2 {
+    font-size: 2rem;
+    margin: 0 0 1rem;
+  }
+  .pubs ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.2rem;
+    max-width: var(--measure);
+  }
+  .pubs p {
+    margin: 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1.5rem;
+    align-items: start;
+  }
+  figure {
+    margin: 0;
+  }
+  .frame {
+    display: block;
+    background: var(--wash);
+    border: 1px solid var(--rule);
+  }
+  .frame :global(img) {
+    width: 100%;
+    height: auto;
+    max-height: 26rem;
+    object-fit: contain;
+  }
+  figcaption {
+    margin-top: 0.55rem;
+    font-size: 0.98rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+  .pager a {
+    display: grid;
+    gap: 0.15rem;
+    text-decoration: none;
+    max-width: 48%;
+  }
+  .pager .older {
+    text-align: right;
+    margin-left: auto;
+  }
+  .pager .t {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 1.35rem;
+    line-height: 1.15;
+  }
+
+  @media (max-width: 46rem) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .facts > div {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

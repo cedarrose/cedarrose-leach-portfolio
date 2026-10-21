@@ -1,0 +1,97 @@
+---
+import '../styles/global.css';
+import Doodles from '../components/Doodles.astro';
+import { person, SITE_URL } from '../site';
+
+interface Props {
+  title: string;
+  description: string;
+  /** JSON-LD objects for this page (combined into one @graph). */
+  jsonLd?: object[];
+  /** Path to a Markdown version of this page, for agents. */
+  markdown?: string;
+  ogType?: 'website' | 'article' | 'profile';
+  page?: 'home' | 'work';
+}
+
+const { title, description, jsonLd = [], markdown, ogType = 'website', page = 'home' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, SITE_URL).toString();
+const ogImage = new URL('/og.png', SITE_URL).toString();
+const graph = { '@context': 'https://schema.org', '@graph': jsonLd };
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={person.name} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="Site summary for AI agents (llms.txt)" />
+    {markdown && <link rel="alternate" type="text/markdown" href={markdown} title="This page as Markdown" />}
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={person.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${person.name}, ${person.headline}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="theme-color" content="#ffffff" />
+
+    {jsonLd.length > 0 && <script type="application/ld+json" set:html={JSON.stringify(graph)} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot name="header" />
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <hr class="dot-rule" />
+      <div class="wrap footer-inner meta">
+        <p>© {year} {person.name}</p>
+        <p>
+          <a href={`mailto:${person.email}`}>{person.email}</a>
+          <span aria-hidden="true">/</span>
+          <a href={person.linkedin}>LinkedIn</a>
+          <span aria-hidden="true">/</span>
+          <a href={person.resume}>Resume (PDF)</a>
+        </p>
+        <p>
+          For AI agents: <a href="/llms.txt">llms.txt</a> is a short summary, <a href="/llms-full.txt">llms-full.txt</a> has every write-up, and each project page has a Markdown version.
+        </p>
+      </div>
+    </footer>
+    <Doodles page={page} />
+  </body>
+</html>
+
+<style>
+  .site-footer {
+    margin-top: 5rem;
+  }
+  .footer-inner {
+    padding-block: 2rem 3rem;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .footer-inner p {
+    margin: 0;
+  }
+  .footer-inner span {
+    margin-inline: 0.4em;
+    color: var(--dot);
+  }
+</style>

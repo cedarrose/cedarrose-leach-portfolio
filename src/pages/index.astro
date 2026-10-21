@@ -1,0 +1,253 @@
+---
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import WorkRow from '../components/WorkRow.astro';
+import profile from '../assets/profile.png';
+import { person, skills, SITE_URL } from '../site';
+import { getWorkByCategory, getPublications, personJsonLd, workUrl, absolute } from '../lib/work';
+
+const sections = await getWorkByCategory();
+const publications = await getPublications();
+
+const jsonLd = [
+  personJsonLd(),
+  {
+    '@type': 'ProfilePage',
+    '@id': `${SITE_URL}/#page`,
+    url: SITE_URL,
+    name: person.name,
+    mainEntity: { '@id': `${SITE_URL}/#person` },
+  },
+  {
+    '@type': 'ItemList',
+    name: `Work by ${person.name}`,
+    itemListElement: sections
+      .flatMap((s) => s.items)
+      .map((w, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: w.data.title,
+        url: absolute(workUrl(w)),
+      })),
+  },
+];
+---
+
+<Base
+  title={`${person.name}, Electrical and Computer Engineering at USC`}
+  description={person.description}
+  jsonLd={jsonLd}
+  ogType="profile"
+>
+  <header class="hero dots">
+    <div class="wrap hero-grid">
+      <div class="intro">
+        <h1>
+          <span>Cedar Rose</span>
+          <span>Leach</span>
+        </h1>
+        <p class="field">Electrical and Computer Engineering</p>
+        <p class="school meta">University of Southern California, Class of 2027</p>
+        {person.bio.map((p) => <p class="bio">{p}</p>)}
+        <ul class="contact" aria-label="Contact">
+          <li><a href={`mailto:${person.email}`}>{person.email}</a></li>
+          <li><a href={person.linkedin}>LinkedIn</a></li>
+          <li><a href={person.resume}>Resume (PDF)</a></li>
+        </ul>
+      </div>
+      <div class="portrait">
+        <Picture
+          src={profile}
+          formats={['avif', 'webp']}
+          fallbackFormat="webp"
+          widths={[420, 640, 900, 1200]}
+          sizes="(max-width: 52rem) 90vw, 42vw"
+          alt="Collage of Cedar smiling in front of red sandstone rocks, framed by a patterned silicon wafer, a person in a cleanroom suit under yellow lithography light, and tweezers holding a wafer."
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+    <nav class="wrap jump" aria-label="Sections">
+      <ul class="meta">
+        {sections.map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}
+        <li><a href="#publications">Publications</a></li>
+        <li><a href="#skills">Skills</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  {
+    sections.map((s) => (
+      <section id={s.id} class="section" aria-labelledby={`${s.id}-title`}>
+        <hr class="dot-rule" />
+        <div class="wrap">
+          <h2 id={`${s.id}-title`}>{s.title}</h2>
+          {s.items.map((w) => (
+            <WorkRow work={w} />
+          ))}
+        </div>
+      </section>
+    ))
+  }
+
+  <section id="publications" class="section" aria-labelledby="publications-title">
+    <hr class="dot-rule" />
+    <div class="wrap">
+      <h2 id="publications-title">Publications</h2>
+      <ol class="pubs">
+        {
+          publications.map((p) => (
+            <li>
+              <p class="kind meta">{p.kind}</p>
+              <p class="cite">
+                {p.authors} <cite>{p.url ? <a href={p.url}>{p.title}</a> : p.title}</cite>. {p.venue}, {p.date}.
+              </p>
+              <p class="meta">
+                Project: <a href={workUrl(p.work)}>{p.work.data.title}</a>
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section id="skills" class="section" aria-labelledby="skills-title">
+    <hr class="dot-rule" />
+    <div class="wrap">
+      <h2 id="skills-title">Skills</h2>
+      <dl class="skills">
+        {
+          skills.map((g) => (
+            <div>
+              <dt>{g.group}</dt>
+              <dd>{g.items.join(', ')}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding-block: clamp(2.5rem, 7vw, 5rem) 2.5rem;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 4rem);
+  }
+  h1 {
+    margin: 0 0 1.1rem;
+    font-size: clamp(3.6rem, 8.4vw, 7.25rem);
+    line-height: 0.88;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  h1 span {
+    display: block;
+    white-space: nowrap;
+  }
+  .field {
+    margin: 0;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    line-height: 1.15;
+    color: var(--maroon);
+  }
+  .school {
+    margin: 0.25rem 0 1.5rem;
+    font-size: 1.2rem;
+  }
+  .bio {
+    margin: 0 0 0.9rem;
+    max-width: 34rem;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+  }
+  .contact {
+    list-style: none;
+    padding: 0;
+    margin: 1.4rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.6rem;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+  .portrait :global(img) {
+    width: 100%;
+    height: auto;
+  }
+  .jump ul {
+    list-style: none;
+    margin: 2.5rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.4rem;
+    font-size: 1.15rem;
+  }
+  .jump a {
+    color: var(--ink);
+  }
+
+  .section {
+    padding-top: 0;
+  }
+  .section h2 {
+    margin: 2.75rem 0 0.5rem;
+    font-size: clamp(2.4rem, 5vw, 3.4rem);
+    color: var(--ink);
+  }
+
+  .pubs {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1.6rem;
+    max-width: 48rem;
+  }
+  .pubs p {
+    margin: 0;
+  }
+  .pubs .kind {
+    margin-bottom: 0.2rem;
+  }
+  .cite cite {
+    font-style: italic;
+  }
+
+  .skills {
+    margin: 1rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 1.5rem 2.5rem;
+  }
+  .skills dt {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: var(--maroon);
+  }
+  .skills dd {
+    margin: 0.25rem 0 0;
+  }
+
+  @media (max-width: 52rem) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+    .portrait {
+      order: -1;
+      max-width: 32rem;
+      margin-inline: auto;
+    }
+  }
+</style>

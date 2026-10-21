@@ -1,0 +1,174 @@
+@import '@fontsource/barlow-condensed/500.css';
+@import '@fontsource/barlow-condensed/600.css';
+@import '@fontsource/barlow-condensed/700.css';
+@import '@fontsource-variable/source-serif-4/opsz.css';
+@import '@fontsource-variable/source-serif-4/opsz-italic.css';
+
+:root {
+  /* Palette: white paper and peach dots from the original site, warm brown ink,
+     USC-adjacent maroon for headings and links, and the amber of a
+     photolithography room's yellow light for highlights. */
+  --paper: #ffffff;
+  --ink: #33231f;
+  --muted: #6f5e58;
+  --maroon: #6b1414;
+  --amber: #e08a00;
+  --dot: #f5dcc1;
+  --rule: #efe1d2;
+  --wash: #fdf6ee;
+
+  --sans: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --serif: 'Source Serif 4 Variable', Georgia, serif;
+
+  --measure: 66ch;
+  --page: 72rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 1.5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.125rem;
+  line-height: 1.65;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--sans);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+a {
+  color: var(--maroon);
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in srgb, var(--amber) 70%, transparent);
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-color: var(--amber);
+  text-decoration-thickness: 0.2em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: #ffd98a;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--page);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* The dot grid from the original site. */
+.dots {
+  background-image: radial-gradient(var(--dot) 2px, transparent 2.5px);
+  background-size: 40px 40px;
+  background-position: 20px 20px;
+}
+
+/* A single row of the same dots, used to mark the boundary between sections. */
+.dot-rule {
+  height: 6px;
+  margin: 0;
+  border: 0;
+  background-image: radial-gradient(circle, var(--dot) 2.5px, transparent 3px);
+  background-size: 14px 6px;
+  background-repeat: repeat-x;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 10;
+  padding: 0.5rem 0.9rem;
+  background: var(--maroon);
+  color: #fff;
+  font-family: var(--sans);
+  font-weight: 600;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Small sans text used for dates, roles and topics. */
+.meta {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+.topics {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0;
+}
+.topics li:not(:last-child)::after {
+  content: ',';
+  margin-right: 0.35em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

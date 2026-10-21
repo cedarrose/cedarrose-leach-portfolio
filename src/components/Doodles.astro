@@ -1,0 +1,36 @@
+---
+/**
+ * Decorative layer for Cedar's drawn characters. Empty for now.
+ *
+ * Rules for anything added here (see CLAUDE.md):
+ * - Purely decorative: the layer is aria-hidden and ignores pointer events,
+ *   so it never hides or replaces page content for people or agents.
+ * - Put character art in src/assets/doodles/ and render it with <Image />.
+ * - Animate with CSS where possible. If a character needs JavaScript, make it
+ *   its own component here and keep the script small.
+ * - Respect reduced motion: wrap animations in
+ *   @media (prefers-reduced-motion: no-preference) { ... }.
+ */
+interface Props {
+  /** Which page the layer is on, so characters can appear in different spots. */
+  page?: 'home' | 'work';
+}
+const { page = 'home' } = Astro.props;
+---
+
+<div class="doodles" aria-hidden="true" data-page={page}>
+  <slot />
+</div>
+
+<style>
+  .doodles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+  }
+  .doodles:empty {
+    display: none;
+  }
+</style>
