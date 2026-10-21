@@ -2,9 +2,15 @@
 // Project write-ups live in src/content/work/*.md.
 
 // The address the site is served from. Used for canonical URLs, the sitemap,
-// llms.txt and social previews. Change it here if the domain changes
-// (astro.config.mjs reads this value too).
-export const SITE_URL = 'https://cedarroseleach.com';
+// llms.txt and social previews (astro.config.ts reads this value too).
+// On Vercel it comes from the project's production domain automatically, so it
+// stays correct if the domain changes. To force a specific address, set a
+// SITE_URL environment variable in Vercel. The last value is the local fallback.
+const vercelDomain = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+export const SITE_URL = (
+  process.env.SITE_URL ??
+  (vercelDomain ? `https://${vercelDomain}` : 'https://cedarrose-leach-portfolio.vercel.app')
+).replace(/\/$/, '');
 
 export const person = {
   name: 'Cedar Rose Leach',

@@ -16,7 +16,8 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 
 - `src/content/work/*.md`: one file per project. The frontmatter schema is in
   `src/content.config.ts`. The body is the full write-up.
-- `src/site.ts`: name, bio, contact links, skills, section order, and `SITE_URL`.
+- `src/site.ts`: name, bio, contact links, skills, section order, and `SITE_URL`
+  (taken from Vercel's production domain automatically; override with a `SITE_URL` env var).
 - `src/pages/index.astro`: home page (hero, sections, publications, skills).
 - `src/pages/work/[id].astro`: the page for each project.
 - `src/pages/llms.txt.ts`, `llms-full.txt.ts`, `work/[id].md.ts`, `robots.txt.ts`:
