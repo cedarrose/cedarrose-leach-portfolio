@@ -1,0 +1,136 @@
+---
+/**
+ * Two line-drawn silicon wafers, one in each margin, pinned to the window.
+ * Each is a die grid clipped to a circle, with a sketchy double rim, a notch
+ * facing the text, and a few "inked" dies (the dots from the original site).
+ *
+ * The die grid lines sit on a 40px grid from the window's top-left corner,
+ * the same grid the pixel blob walks on. PixelBlob reads the rim positions.
+ * Decorative only: aria-hidden, no pointer events, hidden on narrow screens.
+ */
+---
+
+<div class="wafers" aria-hidden="true">
+  <svg class="filters" width="0" height="0" focusable="false">
+    <filter id="wafer-sketch" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="1" seed="7" />
+      <feDisplacementMap in="SourceGraphic" scale="3" />
+    </filter>
+  </svg>
+  <div class="wafer" data-wafer="left">
+    <div class="dies"></div>
+    <div class="rim"></div>
+  </div>
+  <div class="wafer" data-wafer="right">
+    <div class="dies"></div>
+    <div class="rim"></div>
+  </div>
+</div>
+
+<style>
+  .wafers {
+    --r: 340px;
+    --line: #f1dcc6;
+    --rim: #e8c6a2;
+    --ink: #f3d2b0;
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .filters {
+    position: absolute;
+  }
+
+  .wafer {
+    position: absolute;
+    width: calc(var(--r) * 2);
+    height: calc(var(--r) * 2);
+    filter: url(#wafer-sketch);
+  }
+  /* Each wafer's inner edge stops 2rem short of the text column. */
+  .wafer[data-wafer='left'] {
+    left: calc(50% - 33rem - var(--r) * 2);
+    top: calc(60% - var(--r));
+  }
+  .wafer[data-wafer='right'] {
+    left: calc(50% + 33rem);
+    top: calc(32% - var(--r));
+  }
+
+  /* Die grid and inked dies. background-attachment: fixed keeps them on the
+     window's 40px grid, wherever the wafer sits. */
+  .dies {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background-image:
+      radial-gradient(circle, var(--ink) 2.5px, transparent 3px),
+      radial-gradient(circle, var(--ink) 2.5px, transparent 3px),
+      linear-gradient(to right, var(--line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+    background-size:
+      200px 280px,
+      280px 120px,
+      40px 40px,
+      40px 40px;
+    /* Ink dots land on die centers (20px + multiples of 40px). */
+    background-position:
+      120px 160px,
+      120px 0,
+      0 0,
+      0 0;
+    background-attachment: fixed;
+    /* Edge exclusion: the grid stops just inside the rim, like a real wafer. */
+    -webkit-mask-image: radial-gradient(circle closest-side, #000 calc(100% - 12px), transparent calc(100% - 11px));
+    mask-image: radial-gradient(circle closest-side, #000 calc(100% - 12px), transparent calc(100% - 11px));
+  }
+
+  /* The rim, drawn twice and slightly offset, like a pencil line. */
+  .rim,
+  .rim::before {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px solid var(--rim);
+  }
+  .rim::before {
+    content: '';
+    inset: 3px -1px -2px 2px;
+    border-width: 1px;
+    opacity: 0.55;
+    transform: rotate(4deg);
+  }
+  /* The notch, on the side facing the text. */
+  .rim::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 9px;
+    height: 9px;
+    margin-top: -4.5px;
+    background: var(--paper);
+    border: 1.5px solid var(--rim);
+    transform: rotate(45deg);
+  }
+  .wafer[data-wafer='left'] .rim::after {
+    right: -5px;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    transform: rotate(-135deg);
+  }
+  .wafer[data-wafer='right'] .rim::after {
+    left: -5px;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    transform: rotate(-135deg);
+  }
+
+  /* No margins to draw in on narrow screens. */
+  @media (max-width: 66rem) {
+    .wafers {
+      display: none;
+    }
+  }
+</style>

@@ -24,7 +24,10 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
   agent-facing files, all generated from the same content. Never edit their
   output by hand, and never duplicate content into them.
 - `src/components/Doodles.astro`: the layer for Cedar's characters.
-- `src/components/PixelBlob.astro`: the orange pixel blob who walks the margin dots.
+- `src/components/WaferBackdrop.astro`: the line-drawn wafers in the margins.
+- `src/components/PixelBlob.astro`: the orange pixel blob who lives on the wafer,
+  plus his props (`PROPS_BY_PAGE` picks which parts appear on which page).
+- `src/components/Carousel.astro`: the photo carousel on project pages.
 - `src/styles/global.css`: colors, type, and shared styles.
 - `src/assets/`: images. Put new ones in `src/assets/work/<project-id>/`.
 - `public/files/`: PDFs (resume, posters). `public/og.png`: social preview image.
@@ -42,6 +45,7 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 4. Every gallery image needs real `alt` text describing what's in it. Add a `caption` when
    there's more to say.
 5. Papers, abstracts and posters go in `publications`; they appear on the project page.
+6. Gallery images appear in the photo carousel, in the order listed.
 
 The home page, project page, llms.txt, llms-full.txt, the Markdown copy, the sitemap
 and the structured data all update automatically.
@@ -58,18 +62,21 @@ headings to them; fix only clear misspellings, and only when asked to edit.
 - One typeface: Source Serif 4, at regular weights. No condensed or bold display type.
 - Colors are in `global.css`: warm brown ink, muted brown for secondary text,
   maroon only on hover, amber only for focus rings.
-- The peach dot grid is the site's signature. It's pinned to the window behind every
-  page (`body::before` in `global.css`) and fades out behind the reading column, so
-  it only shows in the margins; on narrow screens it's faint everywhere. Don't add
-  other decorative patterns.
+- The margins hold two subtle, line-drawn silicon wafers (die grid, sketchy rim,
+  notch, a few inked dies), pinned to the window and kept out of the text column.
+  They're hidden on narrow screens. Keep them drawing-like, never photorealistic,
+  and don't add other decorative patterns.
 - No per-item colors, gradient text, tags or keyword chips, cards with shadows, or
   scroll-triggered fade-ins.
 
 ## Decorative characters (doodles)
 
 Add them in `Doodles.astro` (or components it renders). The pixel blob is the
-first one: he walks along a dot row in one margin, pauses, hops to the row above or
-below, and smiles when hovered. He's hidden when the margins are too narrow. Rules:
+first one. He walks the die rows of the wafer in one margin, hops between rows,
+climbs onto small pixel parts (chip, resistor, capacitor, mini wafer) and sometimes
+sits on them. He smiles when hovered, looks at hovered links, waves at the bottom
+of the page, and falls asleep after 45 seconds of inactivity. He's hidden when the
+margins are too narrow. Rules:
 
 - The layer is `aria-hidden` and `pointer-events: none`; characters must never
   cover or replace text, so keep them in the margins. A character may set

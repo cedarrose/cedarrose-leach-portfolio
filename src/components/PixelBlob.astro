@@ -1,84 +1,149 @@
 ---
 /**
- * A little orange pixel blob who lives in the page margins. He walks slowly
- * along a row of background dots, pauses, hops up or down to the next row,
- * and turns around. Hovering over him makes him stop and smile.
+ * A little orange pixel blob who lives on the wafer in one margin.
  *
- * Decorative only: rendered inside the aria-hidden Doodles layer, never over
- * the reading column, and hidden when the margins are too narrow. With
- * reduced motion on, he sits still in the corner (and still smiles on hover).
+ * - Walks slowly along a row of dies, pauses at the end, hops to the row above
+ *   or below, and turns around. He only walks where the wafer is.
+ * - A couple of tiny pixel parts (a chip, a resistor, a capacitor or a mini
+ *   wafer, depending on the page) sit on the rows. He hops onto them, walks
+ *   across, and sometimes sits on one for a moment.
+ * - Hover: he stops, smiles and blushes. Hovering a link: he looks at it.
+ *   Scroll to the bottom of the page: he waves. Idle for a while: he falls
+ *   asleep, and wakes when you move.
+ *
+ * Decorative only: inside the aria-hidden Doodles layer, never over the text,
+ * hidden when the margins are too narrow. With reduced motion he sits still
+ * but still reacts.
  */
 
-// Pixel map, 14 x 11, drawn facing right. One character per pixel:
-// O outline, B body, H highlight, E eye, . empty. Feet are drawn separately.
-const body = [
+const P = 3; // screen pixels per art pixel
+
+type Px = { x: number; y: number; c: string };
+const toPixels = (rows: string[], y0 = 0): Px[] =>
+  rows.flatMap((row, y) => [...row].flatMap((ch, x) => (ch === '.' ? [] : [{ x, y: y + y0, c: ch }])));
+
+// The blob, 14 x 11, drawn facing right.
+// O outline, B body, H highlight, E eye.
+const body = toPixels([
   '....OOOOOO....',
   '..OOBBBBBBOO..',
   '.OBHHBBBBBBBO.',
   '.OBHBBBBBBBBO.',
-  'OBBBBBBEBBEBBO',
-  'OBBBBBBEBBEBBO',
+  'OBBBBBBBBBBBBO',
+  'OBBBBBBBBBBBBO',
   'OBBBBBBBBBBBBO',
   'OBBBBBBBBBBBBO',
   '.OBBBBBBBBBBO.',
   '..OOOOOOOOOO..',
+]);
+const eyes = toPixels(['.......E..E...', '.......E..E...'], 4);
+const closedEyes = toPixels(['......EE..EE..'], 5);
+const mouth = toPixels(['........EE....'], 6);
+const smile = toPixels(['.......E..E...', '........EE....'], 6);
+const cheeks = toPixels(['.....K......K.'], 6);
+const feetA = toPixels(['..OO......OO..'], 10);
+const feetB = toPixels(['...OO....OO...'], 10);
+// Waving arm, two frames, sticking out past the body on the facing side.
+const armA: Px[] = [
+  { x: 14, y: 4, c: 'O' },
+  { x: 14, y: 3, c: 'O' },
+  { x: 15, y: 2, c: 'O' },
+  { x: 15, y: 1, c: 'B' },
+  { x: 16, y: 1, c: 'B' },
+  { x: 15, y: 0, c: 'B' },
 ];
-const feetA = '..OO......OO..';
-const feetB = '...OO....OO...';
+const armB: Px[] = [
+  { x: 14, y: 4, c: 'O' },
+  { x: 15, y: 3, c: 'O' },
+  { x: 16, y: 3, c: 'O' },
+  { x: 16, y: 2, c: 'B' },
+  { x: 17, y: 2, c: 'B' },
+  { x: 17, y: 1, c: 'B' },
+];
 
-const fill: Record<string, string> = {
+const blobColors: Record<string, string> = {
   O: 'var(--blob-line)',
   B: 'var(--blob-body)',
   H: 'var(--blob-shine)',
   E: 'var(--blob-eye)',
+  K: 'var(--blob-cheek)',
 };
 
-type Px = { x: number; y: number; c: string };
-const toPixels = (rows: string[], y0 = 0): Px[] =>
-  rows.flatMap((row, y) =>
-    [...row].flatMap((ch, x) => (ch in fill ? [{ x, y: y + y0, c: ch }] : [])),
-  );
-
-const bodyPx = toPixels(body);
-const eyes = bodyPx.filter((p) => p.c === 'E');
-const shell = bodyPx.filter((p) => p.c !== 'E');
-const feetAPx = toPixels([feetA], 10);
-const feetBPx = toPixels([feetB], 10);
-
-// Faces: a small flat mouth, and a smile with rosy cheeks for hovering.
-const mouth: Px[] = [
-  { x: 8, y: 6, c: 'E' },
-  { x: 9, y: 6, c: 'E' },
-];
-const smile: Px[] = [
-  { x: 7, y: 6, c: 'E' },
-  { x: 10, y: 6, c: 'E' },
-  { x: 8, y: 7, c: 'E' },
-  { x: 9, y: 7, c: 'E' },
-];
-const cheeks: Px[] = [
-  { x: 5, y: 6, c: 'K' },
-  { x: 12, y: 6, c: 'K' },
-];
-const colorOf = (c: string) => (c === 'K' ? 'var(--blob-cheek)' : fill[c]);
+// Props: tiny pixel parts for him to climb on. Drawn at the same pixel size.
+const props: Record<string, { rows: string[]; colors: Record<string, string> }> = {
+  chip: {
+    rows: ['kkkkkkkkkk', 'kwkkkkkkkk', 'kkkkkkkkkk', 'l.l.l.l.l.', 'l.l.l.l.l.'],
+    colors: { k: '#4b3b36', w: '#9c8b84', l: '#c2b4aa' },
+  },
+  resistor: {
+    rows: ['...bbbbbbbb...', 'lllbrbybgbblll', '...bbbbbbbb...'],
+    colors: { b: '#e9cfa6', l: '#b3a59b', r: '#b5521b', y: '#e0a000', g: '#6b5a50' },
+  },
+  capacitor: {
+    rows: ['.cccc.', 'cccccc', 'cssccc', 'cssccc', 'cssccc', 'cccccc', '.l..l.', '.l..l.'],
+    colors: { c: '#5f7d97', s: '#cfdbe5', l: '#b3a59b' },
+  },
+  wafer: {
+    rows: [
+      '...sss...',
+      '.sdsdsds.',
+      '.dsdsdsd.',
+      'sdsdsdsds',
+      'dsdsdsdsd',
+      'sdsdsdsds',
+      '.dsdsdsd.',
+      '.sdsdsds.',
+      '...sss...',
+    ],
+    colors: { s: '#b8b0cc', d: '#d8d2e8' },
+  },
+};
 ---
 
 <div class="blob" data-blob hidden>
+  <div class="z" aria-hidden="true">
+    <svg viewBox="0 0 5 5" width="12" height="12" shape-rendering="crispEdges" fill="var(--blob-line)">
+      <rect x="0" y="0" width="1" height="1" /><rect x="1" y="0" width="1" height="1" /><rect x="2" y="0" width="1" height="1" /><rect x="3" y="0" width="1" height="1" /><rect x="4" y="0" width="1" height="1" /><rect x="3" y="1" width="1" height="1" /><rect x="2" y="2" width="1" height="1" /><rect x="1" y="3" width="1" height="1" /><rect x="0" y="4" width="1" height="1" /><rect x="1" y="4" width="1" height="1" /><rect x="2" y="4" width="1" height="1" /><rect x="3" y="4" width="1" height="1" /><rect x="4" y="4" width="1" height="1" />
+    </svg>
+    <svg viewBox="0 0 5 5" width="8" height="8" shape-rendering="crispEdges" fill="var(--blob-line)">
+      <rect x="0" y="0" width="1" height="1" /><rect x="1" y="0" width="1" height="1" /><rect x="2" y="0" width="1" height="1" /><rect x="3" y="0" width="1" height="1" /><rect x="4" y="0" width="1" height="1" /><rect x="3" y="1" width="1" height="1" /><rect x="2" y="2" width="1" height="1" /><rect x="1" y="3" width="1" height="1" /><rect x="0" y="4" width="1" height="1" /><rect x="1" y="4" width="1" height="1" /><rect x="2" y="4" width="1" height="1" /><rect x="3" y="4" width="1" height="1" /><rect x="4" y="4" width="1" height="1" />
+    </svg>
+  </div>
   <div class="bounce">
-    <svg viewBox="0 0 14 11" width="42" height="33" shape-rendering="crispEdges" aria-hidden="true">
+    <svg viewBox="0 0 14 11" width={14 * P} height={11 * P} shape-rendering="crispEdges">
       <g class="body">
-        {shell.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={colorOf(p.c)} />)}
-        <g class="eyes">{eyes.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={colorOf(p.c)} />)}</g>
-        <g class="mouth">{mouth.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={colorOf(p.c)} />)}</g>
+        {body.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={blobColors[p.c]} />)}
+        <g class="eyes">{eyes.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={blobColors[p.c]} />)}</g>
+        <g class="closed">{closedEyes.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={blobColors[p.c]} />)}</g>
+        <g class="mouth">{mouth.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={blobColors[p.c]} />)}</g>
         <g class="smile">
-          {[...smile, ...cheeks].map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={colorOf(p.c)} />)}
+          {[...smile, ...cheeks].map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={blobColors[p.c]} />)}
         </g>
+        <g class="arm-a">{armA.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={blobColors[p.c]} />)}</g>
+        <g class="arm-b">{armB.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={blobColors[p.c]} />)}</g>
       </g>
-      <g class="feet-a">{feetAPx.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={colorOf(p.c)} />)}</g>
-      <g class="feet-b">{feetBPx.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={colorOf(p.c)} />)}</g>
+      <g class="feet-a">{feetA.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={blobColors[p.c]} />)}</g>
+      <g class="feet-b">{feetB.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={blobColors[p.c]} />)}</g>
     </svg>
   </div>
 </div>
+
+{
+  Object.entries(props).map(([name, def]) => {
+    const px = toPixels(def.rows);
+    const w = def.rows[0].length;
+    const h = def.rows.length;
+    return (
+      <div class="prop" data-prop={name} data-w={w * P} data-h={h * P} hidden>
+        <svg viewBox={`0 0 ${w} ${h}`} width={w * P} height={h * P} shape-rendering="crispEdges">
+          {px.map((p) => (
+            <rect x={p.x} y={p.y} width="1" height="1" fill={def.colors[p.c]} />
+          ))}
+        </svg>
+      </div>
+    );
+  })
+}
 
 <style>
   .blob {
@@ -94,8 +159,15 @@ const colorOf = (c: string) => (c === 'K' ? 'var(--blob-cheek)' : fill[c]);
     height: 33px;
     pointer-events: auto;
     will-change: transform;
+    z-index: 1;
   }
-  .blob[hidden] {
+  .prop {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .blob[hidden],
+  .prop[hidden] {
     display: none;
   }
   svg {
@@ -103,20 +175,46 @@ const colorOf = (c: string) => (c === 'K' ? 'var(--blob-cheek)' : fill[c]);
     overflow: visible;
   }
   /* Facing left mirrors the drawing. */
-  .blob.left svg {
+  .blob.left .bounce svg {
     transform: scaleX(-1);
   }
+  .eyes {
+    transition: transform 160ms ease;
+  }
 
+  /* Default face: open eyes, small mouth, no arm. */
+  .closed,
   .smile,
   .feet-b,
+  .arm-a,
+  .arm-b,
+  .z,
   .blob.blink .eyes {
     visibility: hidden;
   }
-  .blob.happy .smile {
+  .blob.happy .smile,
+  .blob.waving .smile,
+  .blob.sleeping .closed,
+  .blob.sleeping .z,
+  .blob.waving .arm-a {
     visibility: visible;
   }
-  .blob.happy .mouth {
+  .blob.happy .mouth,
+  .blob.waving .mouth,
+  .blob.sleeping .eyes {
     visibility: hidden;
+  }
+
+  .z {
+    position: absolute;
+    left: 30px;
+    bottom: 30px;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+  }
+  .z svg:last-child {
+    margin-bottom: 10px;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -130,9 +228,24 @@ const colorOf = (c: string) => (c === 'K' ? 'var(--blob-cheek)' : fill[c]);
     .blob.walking .body {
       animation: bob 0.7s step-end infinite;
     }
-    /* A small happy hop when hovered. */
+    .blob.waving .arm-a {
+      animation: step-a 0.5s step-end infinite;
+    }
+    .blob.waving .arm-b {
+      animation: step-b 0.5s step-end infinite;
+    }
     .blob.happy .bounce {
       animation: happy-hop 0.45s ease-out;
+    }
+    .blob.sleeping .body {
+      animation: breathe 2.4s ease-in-out infinite;
+      transform-origin: 50% 100%;
+    }
+    .blob.sleeping .z svg {
+      animation: drift 2.4s ease-in-out infinite;
+    }
+    .blob.sleeping .z svg:last-child {
+      animation-delay: 1.2s;
     }
   }
 
@@ -153,128 +266,269 @@ const colorOf = (c: string) => (c === 'K' ? 'var(--blob-cheek)' : fill[c]);
     40% { transform: translateY(-7px); }
     100% { transform: translateY(0); }
   }
+  @keyframes breathe {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.94); }
+  }
+  @keyframes drift {
+    0% { transform: translateY(4px); opacity: 0; }
+    30% { opacity: 1; }
+    100% { transform: translateY(-8px); opacity: 0; }
+  }
 </style>
 
 <script>
   // Keep in sync with --page (68rem) and --gutter in global.css.
   const PAGE = 68 * 16;
-  const GRID = 40; // dot spacing; dot centers are at multiples of 40px
+  const GRID = 40; // die size; row lines sit at multiples of 40px
   const W = 42;
   const H = 33;
   const SPEED = 12; // px per second: slow on purpose
   const HOP_MS = 700;
+  const STEP_MS = 320;
+  const SLEEP_AFTER = 45_000;
+  const ROW_TOP = 120; // stay below the page header
+
+  // Which parts appear on which page.
+  const PROPS_BY_PAGE: Record<string, string[]> = {
+    '/': ['chip', 'wafer'],
+    arm: ['chip', 'capacitor'],
+    'northrop-grumman': ['wafer', 'chip'],
+    'neural-probe': ['capacitor', 'wafer'],
+    'sweat-rate-sensor': ['resistor', 'chip'],
+    nanofabrication: ['wafer', 'resistor'],
+    'analog-front-end': ['resistor', 'capacitor'],
+    memoir: ['chip', 'resistor'],
+    boeing: ['chip', 'capacitor'],
+    'usc-makers': ['resistor', 'capacitor'],
+  };
+
+  type Row = { y: number; a: number; b: number }; // blob-center x range on this row
+  type Prop = { el: HTMLElement; y: number; x: number; w: number; h: number };
 
   const el = document.querySelector<HTMLElement>('[data-blob]');
-  if (el) {
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-    const side: 'left' | 'right' = Math.random() < 0.5 ? 'left' : 'right';
+  const eyesEl = el?.querySelector<SVGGElement>('.eyes');
 
-    // The dotted margin the blob may use, as dot-column and dot-row limits.
-    let cols = { min: 0, max: 0 };
-    let rows = { min: 0, max: 0 };
+  if (el && eyesEl) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const pageKey = location.pathname.split('/').filter(Boolean).pop() ?? '/';
+    const propNames = PROPS_BY_PAGE[pageKey] ?? PROPS_BY_PAGE['/'];
+    let side: 'left' | 'right' = Math.random() < 0.5 ? 'left' : 'right';
 
-    let cx = 0; // center x, on a dot column
-    let rowY = 0; // y of the dot row he stands on
+    let rows: Row[] = [];
+    let props: Prop[] = [];
+    let row: Row | null = null;
+    let cx = 0;
     let dir = 1;
-    let mode: 'walk' | 'pause' | 'hop' = 'pause';
-    let targetX = 0;
+    let lift = 0; // height of the prop he's standing on
+    let mode: 'walk' | 'pause' | 'hop' | 'sit' = 'pause';
     let wait = 1500;
-    let hop = { t: 0, fromY: 0, toY: 0 };
+    let hop = { t: 0, fromX: 0, toX: 0, fromY: 0, toY: 0 };
+    let step = { t: 1, from: 0, to: 0 };
+    let satOn: Prop | null = null;
     let hovered = false;
+    let sleeping = false;
+    let lastActive = performance.now();
     let last = performance.now();
 
+    const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
     const gutter = () => Math.min(48, Math.max(20, innerWidth * 0.05));
 
-    function measure(): boolean {
-      const textEdge = Math.max(0, (innerWidth - PAGE) / 2) + gutter();
-      const room = textEdge - 20; // keep clear of the text
-      let lo: number, hi: number;
-      if (side === 'left') {
-        lo = GRID;
-        hi = Math.floor((room - W / 2) / GRID) * GRID;
-      } else {
-        lo = Math.ceil((innerWidth - room + W / 2) / GRID) * GRID;
-        hi = Math.floor((innerWidth - W / 2 - 8) / GRID) * GRID;
+    // Rows of dies on this side's wafer that are inside the margin.
+    function rowsFor(s: 'left' | 'right'): Row[] {
+      const rim = document.querySelector(`[data-wafer="${s}"] .rim`)?.getBoundingClientRect();
+      if (!rim || rim.width === 0) return [];
+      const r = rim.width / 2 - 18;
+      const wx = rim.left + rim.width / 2;
+      const wy = rim.top + rim.height / 2;
+      const textEdge = Math.max(0, (innerWidth - PAGE) / 2) + gutter() - 16;
+      const lo = s === 'left' ? 8 : innerWidth - textEdge;
+      const hi = s === 'left' ? textEdge : innerWidth - 8;
+      const out: Row[] = [];
+      for (let y = Math.ceil(ROW_TOP / GRID) * GRID; y <= innerHeight - 16; y += GRID) {
+        // Use the chord a little above the row too, so his body stays on the wafer.
+        const dy = Math.max(Math.abs(y - wy), Math.abs(y - H - wy));
+        if (dy >= r) continue;
+        const half = Math.sqrt(r * r - dy * dy);
+        const a = Math.max(wx - half, lo) + W / 2;
+        const b = Math.min(wx + half, hi) - W / 2;
+        if (b - a >= GRID) out.push({ y, a, b });
       }
-      cols = { min: lo, max: hi };
-      rows = { min: GRID * 4, max: Math.floor((innerHeight - 24) / GRID) * GRID };
-      return hi - lo >= GRID && rows.max > rows.min;
+      return out;
     }
 
-    const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
+    function placeProps() {
+      props.forEach((p) => (p.el.hidden = true));
+      props = [];
+      const byLength = [...rows].sort((p, q) => q.b - q.a - (p.b - p.a));
+      const used: number[] = [];
+      for (const name of propNames) {
+        const propEl = document.querySelector<HTMLElement>(`[data-prop="${name}"]`);
+        const r = byLength.find((x) => !used.some((u) => Math.abs(u - x.y) <= GRID) && x.b - x.a >= 110);
+        if (!propEl || !r) continue;
+        used.push(r.y);
+        const w = Number(propEl.dataset.w);
+        const h = Number(propEl.dataset.h);
+        const x = Math.round(r.a + (r.b - r.a) * (0.35 + Math.random() * 0.3));
+        propEl.style.transform = `translate(${x - w / 2}px, ${r.y - h}px)`;
+        propEl.hidden = false;
+        props.push({ el: propEl, y: r.y, x, w, h });
+      }
+    }
 
-    function place(y = rowY) {
-      el!.style.transform = `translate(${cx - W / 2}px, ${y - H - 1}px)`;
+    function propUnder(x: number, y: number) {
+      return props.find((p) => p.y === y && Math.abs(x - p.x) < p.w / 2 + 4) ?? null;
+    }
+
+    function draw(y: number) {
+      el!.style.transform = `translate(${Math.round(cx - W / 2)}px, ${Math.round(y - H)}px)`;
       el!.classList.toggle('left', dir < 0);
     }
 
-    function setup() {
-      const ok = measure();
-      el!.hidden = !ok;
-      if (!ok) return false;
-      cx = clamp(cx || (side === 'left' ? cols.min : cols.max), cols.min, cols.max);
-      rowY = clamp(rowY || rows.max, rows.min, rows.max);
-      place();
+    function setup(): boolean {
+      // Prefer the side with more walkable rows if the chosen one has too few.
+      let r = rowsFor(side);
+      const other = side === 'left' ? 'right' : 'left';
+      if (r.length < 3) {
+        const o = rowsFor(other);
+        if (o.length > r.length) {
+          side = other;
+          r = o;
+        }
+      }
+      rows = r;
+      el!.hidden = rows.length < 2;
+      if (el!.hidden) {
+        props.forEach((p) => (p.el.hidden = true));
+        return false;
+      }
+      placeProps();
+      // Keep him on the closest row that still exists.
+      const target = row?.y ?? rows[rows.length - 1].y;
+      row = rows.reduce((best, x) => (Math.abs(x.y - target) < Math.abs(best.y - target) ? x : best));
+      cx = clamp(cx || row.a, row.a, row.b);
+      lift = propUnder(cx, row.y)?.h ?? 0;
+      step = { t: 1, from: lift, to: lift };
+      draw(row.y - lift);
       return true;
     }
 
     function startWalk() {
-      targetX = dir > 0 ? cols.max : cols.min;
-      if (targetX === cx) {
-        dir = -dir;
-        targetX = dir > 0 ? cols.max : cols.min;
-      }
+      if (!row) return;
+      // Walk toward whichever end is farther away.
+      dir = row.b - cx >= cx - row.a ? 1 : -1;
       mode = 'walk';
       el!.classList.add('walking');
     }
 
     function startHop() {
-      const canUp = rowY - GRID >= rows.min;
-      const canDown = rowY + GRID <= rows.max;
-      const up = canUp && (!canDown || Math.random() < 0.6);
-      hop = { t: 0, fromY: rowY, toY: rowY + (up ? -GRID : GRID) };
+      if (!row) return;
+      const i = rows.indexOf(row);
+      const up = rows[i - 1];
+      const down = rows[i + 1];
+      const goUp = up && up.y === row.y - GRID && (!down || down.y !== row.y + GRID || Math.random() < 0.6);
+      const next = goUp ? up : down && down.y === row.y + GRID ? down : up ?? down;
+      if (!next) {
+        startWalk();
+        return;
+      }
+      const toX = clamp(cx, next.a, next.b);
+      hop = { t: 0, fromX: cx, toX, fromY: row.y - lift, toY: next.y - (propUnder(toX, next.y)?.h ?? 0) };
+      row = next;
       mode = 'hop';
+      el!.classList.remove('walking');
+    }
+
+    function tick(now: number) {
+      const dt = Math.min(64, now - last);
+      last = now;
+
+      if (!sleeping && now - lastActive > SLEEP_AFTER && mode !== 'hop') {
+        sleeping = true;
+        el!.classList.add('sleeping');
+        el!.classList.remove('walking', 'blink');
+      }
+
+      const frozen = el!.hidden || sleeping || (hovered && mode !== 'hop');
+      if (!frozen && row) {
+        if (mode === 'walk') {
+          cx += (dir * SPEED * dt) / 1000;
+          const end = dir > 0 ? row.b : row.a;
+          if ((dir > 0 && cx >= end) || (dir < 0 && cx <= end)) {
+            cx = end;
+            mode = 'pause';
+            wait = 1200 + Math.random() * 1800;
+            el!.classList.remove('walking');
+          }
+          // Step up onto a prop or down off it.
+          const p = propUnder(cx, row.y);
+          const target = p?.h ?? 0;
+          if (target !== step.to) step = { t: 0, from: lift, to: target };
+          // Sometimes sit down for a bit in the middle of a prop.
+          if (p && p !== satOn && Math.abs(cx - p.x) < 1.5) {
+            satOn = p;
+            if (Math.random() < 0.6) {
+              mode = 'sit';
+              wait = 2500 + Math.random() * 2000;
+              el!.classList.remove('walking');
+            }
+          }
+          if (!p) satOn = null;
+        } else if (mode === 'pause' || mode === 'sit') {
+          wait -= dt;
+          if (wait <= 0) {
+            if (mode === 'sit') {
+              mode = 'walk';
+              el!.classList.add('walking');
+            } else startHop();
+          }
+        }
+
+        if (mode === 'hop') {
+          hop.t = Math.min(1, hop.t + dt / HOP_MS);
+          cx = hop.fromX + (hop.toX - hop.fromX) * hop.t;
+          const y = hop.fromY + (hop.toY - hop.fromY) * hop.t - Math.sin(Math.PI * hop.t) * 16;
+          draw(y);
+          if (hop.t === 1) {
+            lift = row.y - hop.toY;
+            step = { t: 1, from: lift, to: lift };
+            startWalk();
+          }
+        } else {
+          if (step.t < 1) {
+            step.t = Math.min(1, step.t + dt / STEP_MS);
+            lift = step.from + (step.to - step.from) * step.t + Math.sin(Math.PI * step.t) * 8;
+            if (step.t === 1) lift = step.to;
+          }
+          draw(row.y - lift);
+        }
+      }
+      if (!reduce) requestAnimationFrame(tick);
     }
 
     function blink() {
-      if (!hovered) {
+      if (!hovered && !sleeping) {
         el!.classList.add('blink');
         setTimeout(() => el!.classList.remove('blink'), 140);
       }
       setTimeout(blink, 2500 + Math.random() * 4000);
     }
 
-    function tick(now: number) {
-      const dt = Math.min(64, now - last);
-      last = now;
-      // A hop in progress always lands, even if he's hovered mid-air.
-      if (!el!.hidden && (!hovered || mode === 'hop')) {
-        if (mode === 'walk') {
-          const step = (SPEED * dt) / 1000;
-          cx = Math.abs(targetX - cx) <= step ? targetX : cx + Math.sign(targetX - cx) * step;
-          if (cx === targetX) {
-            mode = 'pause';
-            wait = 1200 + Math.random() * 1800;
-            el!.classList.remove('walking');
-          }
-          place();
-        } else if (mode === 'pause') {
-          wait -= dt;
-          if (wait <= 0) startHop();
-        } else if (mode === 'hop') {
-          hop.t = Math.min(1, hop.t + dt / HOP_MS);
-          const y = hop.fromY + (hop.toY - hop.fromY) * hop.t - Math.sin(Math.PI * hop.t) * 16;
-          place(y);
-          if (hop.t === 1) {
-            rowY = hop.toY;
-            dir = -dir;
-            startWalk();
-          }
-        }
+    // Waking up on any activity.
+    function activity() {
+      lastActive = performance.now();
+      if (sleeping) {
+        sleeping = false;
+        el!.classList.remove('sleeping');
+        if (mode === 'walk') el!.classList.add('walking');
+        last = performance.now();
       }
-      requestAnimationFrame(tick);
+    }
+    for (const type of ['pointermove', 'pointerdown', 'keydown', 'scroll', 'wheel', 'touchstart']) {
+      addEventListener(type, activity, { passive: true });
     }
 
+    // Hover: stop, smile, blush.
     el.addEventListener('pointerenter', () => {
       hovered = true;
       el.classList.remove('blink', 'walking');
@@ -289,16 +543,62 @@ const colorOf = (c: string) => (c === 'K' ? 'var(--blob-cheek)' : fill[c]);
       }, 500);
     });
 
+    // Look at whichever link is being hovered.
+    document.addEventListener('pointerover', (e) => {
+      const link = (e.target as Element | null)?.closest?.('a');
+      if (!link || el.hidden) return;
+      const l = link.getBoundingClientRect();
+      const b = el.getBoundingClientRect();
+      let dx = Math.sign(l.left + l.width / 2 - (b.left + b.width / 2));
+      const dy = clamp(Math.round((l.top + l.height / 2 - (b.top + b.height / 2)) / 200), -1, 1);
+      if (dir < 0) dx = -dx; // the drawing is mirrored when he faces left
+      eyesEl.style.transform = `translate(${dx}px, ${dy}px)`;
+    });
+    document.addEventListener('pointerout', (e) => {
+      if ((e.target as Element | null)?.closest?.('a')) eyesEl.style.transform = '';
+    });
+
+    // Wave when you reach the bottom of the page.
+    let waved = false;
+    addEventListener(
+      'scroll',
+      () => {
+        const atBottom = innerHeight + scrollY >= document.documentElement.scrollHeight - 4;
+        if (atBottom && !waved && !el.hidden) {
+          waved = true;
+          el.classList.add('waving');
+          setTimeout(() => el.classList.remove('waving'), 2600);
+        }
+        if (!atBottom) waved = false;
+      },
+      { passive: true },
+    );
+
     addEventListener('resize', () => {
-      if (setup() && !reduce.matches && mode === 'pause' && !el.classList.contains('walking')) {
-        targetX = clamp(targetX, cols.min, cols.max);
+      setup();
+      if (mode === 'hop' && row) {
+        // Land immediately rather than hopping to a stale position.
+        cx = clamp(cx, row.a, row.b);
+        startWalk();
       }
     });
 
-    // With reduced motion he just sits in the bottom corner of the margin.
-    if (setup() && !reduce.matches) startWalk();
-    if (!reduce.matches) {
-      setTimeout(blink, 3000);
+    if (setup()) {
+      if (reduce) {
+        // Sit still at the start of the lowest row.
+        row = rows[rows.length - 1];
+        cx = row.a;
+        lift = propUnder(cx, row.y)?.h ?? 0;
+        mode = 'sit';
+        wait = Infinity;
+        draw(row.y - lift);
+        setInterval(() => tick(performance.now()), 1000); // only for falling asleep
+      } else {
+        startWalk();
+        setTimeout(blink, 3000);
+        requestAnimationFrame(tick);
+      }
+    } else if (!reduce) {
       requestAnimationFrame(tick);
     }
   }

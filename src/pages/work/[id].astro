@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Carousel from '../../components/Carousel.astro';
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { person, SITE_URL } from '../../site';
@@ -162,15 +162,8 @@ const jsonLd: object[] = [
       d.gallery.length > 0 && (
         <section class="gallery" aria-labelledby="gallery-title">
           <h2 id="gallery-title">Photos and figures</h2>
-          <div class="grid">
-            {d.gallery.map((g) => (
-              <figure>
-                <div class="frame">
-                  <Image src={g.src} alt={g.alt} widths={[480, 800, 1200]} sizes="(max-width: 46rem) 92vw, 30rem" />
-                </div>
-                {g.caption && <figcaption>{g.caption}</figcaption>}
-              </figure>
-            ))}
+          <div class="breakout">
+            <Carousel items={d.gallery} label={`Photos and figures for ${d.title}`} />
           </div>
         </section>
       )
@@ -224,7 +217,7 @@ const jsonLd: object[] = [
   }
 
   .project {
-    max-width: 48rem;
+    max-width: 52rem;
   }
   .project-head {
     padding-top: clamp(2.5rem, 8vw, 5rem);
@@ -281,7 +274,6 @@ const jsonLd: object[] = [
 
   .prose {
     margin-top: 2.5rem;
-    max-width: var(--measure);
   }
   .prose :global(h2) {
     margin: 2.75rem 0 0.75rem;
@@ -324,36 +316,17 @@ const jsonLd: object[] = [
     margin: 0;
     display: grid;
     gap: 1.25rem;
-    max-width: var(--measure);
   }
   .pubs p {
     margin: 0;
   }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2.25rem 1.5rem;
-    align-items: start;
-  }
-  figure {
-    margin: 0;
-  }
-  .frame {
-    display: block;
-    background: var(--wash);
-  }
-  .frame :global(img) {
-    width: 100%;
-    height: auto;
-    max-height: 24rem;
-    object-fit: contain;
-  }
-  figcaption {
-    margin-top: 0.6rem;
-    font-size: 0.9375rem;
-    line-height: 1.5;
-    color: var(--muted);
+  /* The carousel is wider than the text column, centered on it. */
+  .breakout {
+    position: relative;
+    left: 50%;
+    width: min(100vw, 64rem);
+    transform: translateX(-50%);
   }
 
   .pager {
@@ -366,6 +339,7 @@ const jsonLd: object[] = [
   }
   .pager a {
     display: grid;
+    align-content: start;
     gap: 0.2rem;
     text-decoration: none;
     max-width: 48%;
@@ -380,9 +354,6 @@ const jsonLd: object[] = [
   }
 
   @media (max-width: 46rem) {
-    .grid {
-      grid-template-columns: 1fr;
-    }
     .facts > div {
       grid-template-columns: 1fr;
     }

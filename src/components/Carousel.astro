@@ -1,0 +1,240 @@
+---
+/**
+ * Photo carousel: the focused photo sits in the center, with its neighbors
+ * showing faintly to the left and right. Swipe, scroll sideways, use the
+ * arrow keys, the buttons, or click a neighbor to bring it to the center.
+ *
+ * Every photo and caption is always in the HTML (nothing is lazy-inserted or
+ * hidden), so agents and screen readers get all of them. Without JavaScript
+ * it's a plain sideways-scrolling row.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  items: { src: ImageMetadata; alt: string; caption?: string }[];
+  label: string;
+}
+const { items, label } = Astro.props;
+---
+
+<div class="carousel" data-carousel>
+  <div class="track" tabindex="0" role="group" aria-label={label}>
+    {
+      items.map((g, i) => (
+        <figure class="slide" data-index={i}>
+          <Image
+            src={g.src}
+            alt={g.alt}
+            widths={[480, 800, 1200]}
+            sizes="(max-width: 46rem) 80vw, 40rem"
+            loading={i < 3 ? 'eager' : 'lazy'}
+          />
+          {g.caption && <figcaption>{g.caption}</figcaption>}
+        </figure>
+      ))
+    }
+  </div>
+  {
+    items.length > 1 && (
+      <div class="controls">
+        <button type="button" data-prev aria-label="Previous photo">
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+            <path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </button>
+        <span class="count meta" aria-live="polite" data-count>
+          1 / {items.length}
+        </span>
+        <button type="button" data-next aria-label="Next photo">
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+            <path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </button>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .carousel {
+    position: relative;
+  }
+  .track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding-block: 0.5rem;
+    /* Fade the previews out toward the edges. */
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+  }
+  @media (max-width: 44rem) {
+    .track {
+      gap: 0.75rem;
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+      mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+    }
+  }
+  .track::-webkit-scrollbar {
+    display: none;
+  }
+  /* Spacers so the first and last photos can sit in the center. */
+  .track::before,
+  .track::after {
+    content: '';
+    flex: 0 0 calc(50% - 1.5rem);
+  }
+  .track:focus-visible {
+    outline-offset: 6px;
+  }
+
+  .slide {
+    flex: 0 0 auto;
+    display: table;
+    margin: 0;
+    scroll-snap-align: center;
+    transition:
+      opacity 300ms ease,
+      transform 300ms ease;
+  }
+  /* Photos keep their own shape, within a maximum size. */
+  .slide :global(img) {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: min(40rem, 80vw);
+    max-height: clamp(14rem, 50vh, 26rem);
+  }
+  figcaption {
+    display: table-caption;
+    caption-side: bottom;
+    padding-top: 0.6rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  /* Once the script runs, only the centered photo is at full strength. */
+  .carousel.ready .slide:not(.is-active) {
+    opacity: 0.3;
+    transform: scale(0.92);
+    cursor: pointer;
+  }
+  .carousel.ready .slide:not(.is-active) figcaption {
+    visibility: hidden;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.75rem;
+  }
+  .controls button {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    transition:
+      border-color 120ms ease,
+      color 120ms ease;
+  }
+  .controls button:hover:not(:disabled) {
+    border-color: var(--maroon);
+    color: var(--maroon);
+  }
+  .controls button:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .count {
+    min-width: 3.5rem;
+    text-align: center;
+  }
+</style>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-carousel]')) {
+    const track = root.querySelector<HTMLElement>('.track')!;
+    const slides = [...root.querySelectorAll<HTMLElement>('.slide')];
+    const prev = root.querySelector<HTMLButtonElement>('[data-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-next]');
+    const count = root.querySelector<HTMLElement>('[data-count]');
+    let active = 0;
+
+    const centerOf = (s: HTMLElement) => s.offsetLeft + s.offsetWidth / 2 - track.clientWidth / 2;
+
+    function go(i: number, smooth = true) {
+      const s = slides[Math.max(0, Math.min(slides.length - 1, i))];
+      track.scrollTo({ left: centerOf(s), behavior: smooth && !reduce ? 'smooth' : 'auto' });
+    }
+
+    function update() {
+      const mid = track.scrollLeft + track.clientWidth / 2;
+      let best = 0;
+      slides.forEach((s, i) => {
+        const d = Math.abs(s.offsetLeft + s.offsetWidth / 2 - mid);
+        const bd = Math.abs(slides[best].offsetLeft + slides[best].offsetWidth / 2 - mid);
+        if (d < bd) best = i;
+      });
+      active = best;
+      slides.forEach((s, i) => s.classList.toggle('is-active', i === active));
+      if (count) count.textContent = `${active + 1} / ${slides.length}`;
+      if (prev) prev.disabled = active === 0;
+      if (next) next.disabled = active === slides.length - 1;
+    }
+
+    let queued = false;
+    track.addEventListener(
+      'scroll',
+      () => {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(() => {
+          queued = false;
+          update();
+        });
+      },
+      { passive: true },
+    );
+
+    prev?.addEventListener('click', () => go(active - 1));
+    next?.addEventListener('click', () => go(active + 1));
+    slides.forEach((s, i) =>
+      s.addEventListener('click', () => {
+        if (i !== active) go(i);
+      }),
+    );
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        go(active + 1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        go(active - 1);
+      }
+    });
+    addEventListener('resize', () => go(active, false));
+    // Images change the slide widths as they load; keep the active one centered.
+    for (const img of root.querySelectorAll('img')) {
+      if (!img.complete) img.addEventListener('load', () => go(active, false), { once: true });
+    }
+
+    root.classList.add('ready');
+    go(0, false);
+    update();
+  }
+</script>
