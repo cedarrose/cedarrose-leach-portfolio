@@ -1,5 +1,6 @@
 ---
-title: FPGA internship
+order: 8
+title: Boeing FPGA Intern
 org: Boeing Satellite Development Center
 orgUrl: https://www.boeing.com/
 role: Intern (FPGAs, satellites and systems)

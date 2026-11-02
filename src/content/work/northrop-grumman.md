@@ -1,5 +1,6 @@
 ---
-title: Electron beam lithography internship
+order: 2
+title: Microelectronics @ Northrop Grumman
 org: Northrop Grumman
 orgUrl: https://www.northropgrumman.com/
 role: Hardware engineering intern, Electron Beam Lithography team
@@ -10,7 +11,7 @@ summary: Validated three wafer anti-charging agents for electron beam lithograph
 tags: [Electron beam lithography, Microelectronics, Process engineering, Design of experiments]
 ---
 
-This summer, I had the privilege of working with the Electron Beam Lithography (EBL) team at Northrop Grumman.
+In summer 2025, I had the privilege of working with the Electron Beam Lithography (EBL) team at Northrop Grumman.
 
 ## What the team does
 

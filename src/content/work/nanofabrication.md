@@ -1,4 +1,5 @@
 ---
+order: 5
 title: Semiconductor nanofabrication
 org: John O'Brien Nanofabrication Laboratory, USC
 orgUrl: https://nanofab.usc.edu/

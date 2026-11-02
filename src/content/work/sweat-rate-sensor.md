@@ -1,4 +1,5 @@
 ---
+order: 4
 title: Printed wearable sweat rate sensor
 org: Khan Lab, USC
 orgUrl: https://khan.usc.edu/

@@ -32,10 +32,12 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 ## Adding a project
 
 1. Create `src/content/work/<id>.md` (the file name becomes the URL `/work/<id>/`).
-2. Fill in the frontmatter; copy an existing file as a template. `category` is one of
+2. Fill in the frontmatter; copy an existing file as a template. `order` sets the
+   position in the home page list (1 = top; renumber the others to fit). `category` is one of
    `experience`, `research`, `building`, `mentoring`. Dates are `YYYY-MM`; `end` can be `present`.
 3. Write `summary` as one sentence: it opens the project page and appears in llms.txt.
-   The home page shows only the years, title and organization.
+   The home page shows only the years, title and organization (the organization is
+   hidden when the title already names it).
 4. Every gallery image needs real `alt` text describing what's in it. Add a `caption` when
    there's more to say.
 5. Papers, abstracts and posters go in `publications`; they appear on the project page.

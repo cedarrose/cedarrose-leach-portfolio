@@ -180,7 +180,7 @@ const jsonLd: object[] = [
       {
         newer ? (
           <a href={workUrl(newer)} rel="prev">
-            <span class="meta">Newer</span>
+            <span class="meta">Previous</span>
             <span class="t">{newer.data.title}</span>
           </a>
         ) : (
@@ -190,7 +190,7 @@ const jsonLd: object[] = [
       {
         older && (
           <a href={workUrl(older)} rel="next" class="older">
-            <span class="meta">Older</span>
+            <span class="meta">Next</span>
             <span class="t">{older.data.title}</span>
           </a>
         )

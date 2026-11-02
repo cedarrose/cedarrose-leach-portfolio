@@ -1,4 +1,5 @@
 ---
+order: 9
 title: USC Makers projects
 org: USC Makers
 orgUrl: https://viterbimakers.usc.edu/

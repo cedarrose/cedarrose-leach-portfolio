@@ -16,7 +16,7 @@ export const person = {
   name: 'Cedar Rose Leach',
   headline: 'Electrical and Computer Engineering at USC, Class of 2027',
   school: 'University of Southern California',
-  degree: 'B.S. in Electrical and Computer Engineering',
+  degree: 'B.S. and M.S. in Electrical and Computer Engineering',
   classOf: '2027',
   email: 'cdleach@usc.edu',
   linkedin: 'https://www.linkedin.com/in/cedar-rose-leach',

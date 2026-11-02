@@ -1,4 +1,5 @@
 ---
+order: 3
 title: Hybrid silicon-polymer neural probe
 org: Biomedical Microsystems Laboratory, USC
 orgUrl: https://biomems.usc.edu/

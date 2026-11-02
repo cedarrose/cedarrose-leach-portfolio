@@ -1,4 +1,5 @@
 ---
+order: 6
 title: Analog front end for an electrochemical sensing system
 org: Khan Lab, USC
 orgUrl: https://khan.usc.edu/

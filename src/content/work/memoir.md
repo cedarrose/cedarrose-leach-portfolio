@@ -1,11 +1,12 @@
 ---
+order: 7
 title: Memoir
 org: Memoir Photos
 orgUrl: https://memoirphotos.co
 role: Co-founder
 category: building
 start: 2024-09
-end: present
+end: 2025-08
 summary: Co-founded an audio-based, accessible photo library that lets blind and visually impaired people explore, organize and relive their photos.
 tags: [Accessibility, Mobile app, React Native, LLM image captioning, Supabase, Startup]
 awards:

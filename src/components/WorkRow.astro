@@ -7,11 +7,10 @@ interface Props {
 const { work } = Astro.props;
 const d = work.data;
 // The org without a trailing ", USC" keeps rows to one line. It's left out
-// when it would just repeat the title (e.g. "Memoir" at "Memoir Photos").
+// when the title already names it (e.g. "Boeing FPGA Intern" at Boeing).
 const org = d.org.replace(/, USC$/, '');
-const t = d.title.toLowerCase();
-const o = org.toLowerCase();
-const showOrg = !(t.startsWith(o) || o.startsWith(t));
+const firstWord = org.split(/\s+/)[0].toLowerCase();
+const showOrg = !new RegExp(`\\b${firstWord}\\b`, 'i').test(d.title);
 ---
 
 <li>

@@ -24,15 +24,10 @@ export function formatYears(start: string, end: string): string {
   return s === e ? s : `${s}–${e}`;
 }
 
-/** Sort key: ongoing work first, then by most recent end date, then start date. */
-function sortKey(w: Work): string {
-  const end = w.data.end === 'present' ? '9999-99' : w.data.end;
-  return `${end}|${w.data.start}`;
-}
-
+/** All work, in the order set by each file's `order` field. */
 export async function getWork(): Promise<Work[]> {
   const all = await getCollection('work');
-  return all.sort((a, b) => sortKey(b).localeCompare(sortKey(a)));
+  return all.sort((a, b) => a.data.order - b.data.order);
 }
 
 export async function getWorkByCategory() {

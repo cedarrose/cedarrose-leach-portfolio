@@ -11,6 +11,8 @@ const work = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/work' }),
   schema: ({ image }) =>
     z.object({
+      // Position in the home page list (1 = top).
+      order: z.number(),
       title: z.string(),
       // Where the work happened: company, lab, club or startup.
       org: z.string(),
