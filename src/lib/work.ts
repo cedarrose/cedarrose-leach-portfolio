@@ -17,6 +17,13 @@ export function formatRange(start: string, end: string): string {
   return `${formatMonth(start)} – ${end === 'present' ? 'present' : formatMonth(end)}`;
 }
 
+/** Short year range for lists, e.g. "2025", "2024–2025", "2024–present". */
+export function formatYears(start: string, end: string): string {
+  const s = start.slice(0, 4);
+  const e = end === 'present' ? 'present' : end.slice(0, 4);
+  return s === e ? s : `${s}–${e}`;
+}
+
 /** Sort key: ongoing work first, then by most recent end date, then start date. */
 function sortKey(w: Work): string {
   const end = w.data.end === 'present' ? '9999-99' : w.data.end;

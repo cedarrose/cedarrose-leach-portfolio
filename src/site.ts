@@ -21,11 +21,8 @@ export const person = {
   email: 'cdleach@usc.edu',
   linkedin: 'https://www.linkedin.com/in/cedar-rose-leach',
   resume: '/files/cedar-rose-leach-resume.pdf',
-  // Two short paragraphs shown under the name, and used as the site description.
-  bio: [
-    'Passionate about building high-performance hardware for AI, robotics and neural systems. Focusing on neural interfaces, wearable sensors and intelligent robotic systems through fabrication and chip design.',
-    'Co-founder of Memoir Photos, the only accessible photo library for the visually impaired.',
-  ],
+  // One short line shown under the name on the home page.
+  bio: 'Building hardware for AI, robotics and neural systems, from the cleanroom to the circuit board.',
   description:
     'Cedar Rose Leach is an Electrical and Computer Engineering student at USC (Class of 2027) building hardware for AI, robotics and neural systems: neural interfaces, wearable sensors, microfabrication and PCB design. Co-founder of Memoir Photos.',
   knowsAbout: [
@@ -39,38 +36,6 @@ export const person = {
     'Accessibility',
   ],
 };
-
-export const skills: { group: string; items: string[] }[] = [
-  {
-    group: 'Fabrication and hardware',
-    items: [
-      'Cleanroom fabrication (photolithography, deposition, etching, metrology)',
-      'Electron beam lithography',
-      'Parylene deposition and etching',
-      'Femtosecond laser ablation',
-      'PCB design',
-      'Device packaging',
-      'Microelectronics and digital logic',
-      'VLSI design',
-    ],
-  },
-  {
-    group: 'Design and simulation tools',
-    items: ['COMSOL Multiphysics', 'Altium Designer', 'Fusion 360', 'KLayout', 'Vivado and Vitis', 'Figma'],
-  },
-  {
-    group: 'Programming',
-    items: ['Python', 'C++', 'Java', 'Verilog', 'React Native', 'SQL', 'MATLAB', 'Git', 'Supabase'],
-  },
-  {
-    group: 'Machine learning',
-    items: ['NLP', 'Data preprocessing', 'Model training', 'LLM API integration', 'Prompt engineering'],
-  },
-  {
-    group: 'Making',
-    items: ['Graphic and product design', 'Woodworking', 'Resin', 'Sewing', 'Ceramics', 'Painting'],
-  },
-];
 
 export const categories = [
   { id: 'experience', title: 'Experience' },

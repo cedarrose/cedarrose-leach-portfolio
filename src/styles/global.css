@@ -1,28 +1,24 @@
-@import '@fontsource/barlow-condensed/500.css';
-@import '@fontsource/barlow-condensed/600.css';
-@import '@fontsource/barlow-condensed/700.css';
 @import '@fontsource-variable/source-serif-4/opsz.css';
 @import '@fontsource-variable/source-serif-4/opsz-italic.css';
 
 :root {
   /* Palette: white paper and peach dots from the original site, warm brown ink,
-     USC-adjacent maroon for headings and links, and the amber of a
-     photolithography room's yellow light for highlights. */
+     maroon for hover and small accents, amber only for focus rings. */
   --paper: #ffffff;
-  --ink: #33231f;
-  --muted: #6f5e58;
-  --maroon: #6b1414;
+  --ink: #2e2421;
+  --muted: #85756f;
+  --maroon: #7a1f1f;
   --amber: #e08a00;
   --dot: #f5dcc1;
-  --rule: #efe1d2;
-  --wash: #fdf6ee;
+  --rule: #efe4d8;
+  --wash: #fcf8f3;
 
-  --sans: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  /* One family for everything: Source Serif 4, at regular weights. */
   --serif: 'Source Serif 4 Variable', Georgia, serif;
 
-  --measure: 66ch;
-  --page: 72rem;
-  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --measure: 64ch;
+  --page: 68rem;
+  --gutter: clamp(1.25rem, 5vw, 3rem);
 
   color-scheme: light;
 }
@@ -43,10 +39,12 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--serif);
-  font-size: 1.125rem;
-  line-height: 1.65;
+  font-size: 1.0625rem;
+  font-weight: 380;
+  line-height: 1.7;
   font-optical-sizing: auto;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 img {
@@ -59,35 +57,40 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: var(--sans);
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.005em;
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
   color: var(--ink);
   text-wrap: balance;
 }
 
+strong {
+  font-weight: 560;
+}
+
 a {
-  color: var(--maroon);
+  color: inherit;
   text-decoration-line: underline;
-  text-decoration-color: color-mix(in srgb, var(--amber) 70%, transparent);
-  text-decoration-thickness: 0.12em;
-  text-underline-offset: 0.18em;
+  text-decoration-color: var(--rule);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: color 120ms ease, text-decoration-color 120ms ease;
 }
 
 a:hover {
-  text-decoration-color: var(--amber);
-  text-decoration-thickness: 0.2em;
+  color: var(--maroon);
+  text-decoration-color: currentColor;
 }
 
 :focus-visible {
-  outline: 3px solid var(--amber);
+  outline: 2px solid var(--amber);
   outline-offset: 3px;
   border-radius: 2px;
 }
 
 ::selection {
-  background: #ffd98a;
+  background: #ffe2b0;
 }
 
 .wrap {
@@ -102,16 +105,6 @@ a:hover {
   background-image: radial-gradient(var(--dot) 2px, transparent 2.5px);
   background-size: 40px 40px;
   background-position: 20px 20px;
-}
-
-/* A single row of the same dots, used to mark the boundary between sections. */
-.dot-rule {
-  height: 6px;
-  margin: 0;
-  border: 0;
-  background-image: radial-gradient(circle, var(--dot) 2.5px, transparent 3px);
-  background-size: 14px 6px;
-  background-repeat: repeat-x;
 }
 
 .visually-hidden {
@@ -129,37 +122,19 @@ a:hover {
   top: -4rem;
   z-index: 10;
   padding: 0.5rem 0.9rem;
-  background: var(--maroon);
+  background: var(--ink);
   color: #fff;
-  font-family: var(--sans);
-  font-weight: 600;
   text-decoration: none;
 }
 .skip-link:focus {
   top: 1rem;
 }
 
-/* Small sans text used for dates, roles and topics. */
+/* Small, quiet text for dates, roles and labels. */
 .meta {
-  font-family: var(--sans);
-  font-weight: 500;
-  font-size: 1.05rem;
-  line-height: 1.35;
+  font-size: 0.9375rem;
+  line-height: 1.45;
   color: var(--muted);
-  letter-spacing: 0.01em;
-}
-
-.topics {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.15rem 0;
-}
-.topics li:not(:last-child)::after {
-  content: ',';
-  margin-right: 0.35em;
 }
 
 @media (prefers-reduced-motion: reduce) {

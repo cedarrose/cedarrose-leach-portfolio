@@ -16,9 +16,9 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 
 - `src/content/work/*.md`: one file per project. The frontmatter schema is in
   `src/content.config.ts`. The body is the full write-up.
-- `src/site.ts`: name, bio, contact links, skills, section order, and `SITE_URL`
+- `src/site.ts`: name, one-line bio, contact links, and `SITE_URL`
   (taken from Vercel's production domain automatically; override with a `SITE_URL` env var).
-- `src/pages/index.astro`: home page (hero, sections, publications, skills).
+- `src/pages/index.astro`: home page (hero, then one list linking to every project).
 - `src/pages/work/[id].astro`: the page for each project.
 - `src/pages/llms.txt.ts`, `llms-full.txt.ts`, `work/[id].md.ts`, `robots.txt.ts`:
   agent-facing files, all generated from the same content. Never edit their
@@ -33,22 +33,26 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 1. Create `src/content/work/<id>.md` (the file name becomes the URL `/work/<id>/`).
 2. Fill in the frontmatter; copy an existing file as a template. `category` is one of
    `experience`, `research`, `building`, `mentoring`. Dates are `YYYY-MM`; `end` can be `present`.
-3. Write `summary` as one sentence: it appears on the home page and in llms.txt.
+3. Write `summary` as one sentence: it opens the project page and appears in llms.txt.
+   The home page shows only the years, title and organization.
 4. Every gallery image needs real `alt` text describing what's in it. Add a `caption` when
    there's more to say.
-5. Papers, abstracts and posters go in `publications`; they appear in the home page list too.
+5. Papers, abstracts and posters go in `publications`; they appear on the project page.
 
 The home page, project page, llms.txt, llms-full.txt, the Markdown copy, the sitemap
 and the structured data all update automatically.
 
 ## Design rules
 
-- Palette and type are defined in `global.css`. Barlow Condensed for headings,
-  dates and labels; Source Serif 4 for reading text. Maroon for links and project
-  titles, amber only for underlines, focus rings and highlights.
-- The peach dot grid is the site's signature: the hero background and the
-  dotted rules between sections. Don't add other decorative patterns.
-- No per-item colors, gradient text, cards with shadows, or scroll-triggered fade-ins.
+- Clean and quiet, with little text. The home page is not a resume: no skills,
+  publications or keyword lists there, just a link to each project.
+- One typeface: Source Serif 4, at regular weights. No condensed or bold display type.
+- Colors are in `global.css`: warm brown ink, muted brown for secondary text,
+  maroon only on hover, amber only for focus rings.
+- The peach dot grid behind the hero is the site's signature. Don't add other
+  decorative patterns.
+- No per-item colors, gradient text, tags or keyword chips, cards with shadows, or
+  scroll-triggered fade-ins.
 
 ## Decorative characters (doodles)
 

@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { person, skills } from '../site';
+import { person } from '../site';
 import { getWorkByCategory, getPublications, formatRange, workUrl, absolute } from '../lib/work';
 
 // Short Markdown summary of the whole site for AI agents (https://llmstxt.org).
@@ -12,7 +12,7 @@ export const GET: APIRoute = async () => {
     '',
     `> ${person.description}`,
     '',
-    person.bio.join('\n\n'),
+    person.bio,
     '',
     '## Contact',
     '',
@@ -38,8 +38,6 @@ export const GET: APIRoute = async () => {
   for (const p of pubs) {
     out.push(`- ${p.kind}: ${p.authors} "${p.title}." ${p.venue}, ${p.date}.${p.url ? ` ${absolute(p.url)}` : ''}`);
   }
-  out.push('', '## Skills', '');
-  for (const g of skills) out.push(`- ${g.group}: ${g.items.join(', ')}`);
 
   out.push(
     '',

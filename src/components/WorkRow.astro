@@ -1,77 +1,73 @@
 ---
-import { formatRange, workUrl, type Work } from '../lib/work';
+import { formatYears, workUrl, type Work } from '../lib/work';
 
 interface Props {
   work: Work;
 }
 const { work } = Astro.props;
 const d = work.data;
+// The org without a trailing ", USC" keeps rows to one line. It's left out
+// when it would just repeat the title (e.g. "Memoir" at "Memoir Photos").
+const org = d.org.replace(/, USC$/, '');
+const t = d.title.toLowerCase();
+const o = org.toLowerCase();
+const showOrg = !(t.startsWith(o) || o.startsWith(t));
 ---
 
-<article class="row">
-  <p class="when meta">
-    <time datetime={d.start}>{formatRange(d.start, d.end)}</time>
-  </p>
-  <div class="what">
-    <h3><a href={workUrl(work)}>{d.title}</a></h3>
-    <p class="who meta">{d.role}, {d.org}</p>
-    <p class="summary">{d.summary}</p>
-    {
-      d.tags.length > 0 && (
-        <ul class="topics meta" aria-label="Topics">
-          {d.tags.map((t) => (
-            <li>{t}</li>
-          ))}
-        </ul>
-      )
-    }
-  </div>
-</article>
+<li>
+  <a class="row" href={workUrl(work)}>
+    <span class="years meta"><time datetime={d.start}>{formatYears(d.start, d.end)}</time></span>
+    <span class="title">{d.title}</span>
+    {showOrg && <span class="org meta">{org}</span>}
+  </a>
+</li>
 
 <style>
-  .row {
-    display: grid;
-    grid-template-columns: 9.5rem minmax(0, 1fr);
-    gap: 0 2rem;
-    padding-block: 1.6rem;
+  li {
     border-top: 1px solid var(--rule);
   }
-  .row:first-of-type {
-    border-top: 0;
+  li:last-child {
+    border-bottom: 1px solid var(--rule);
   }
-  .when {
-    margin: 0.3rem 0 0;
-  }
-  h3 {
-    margin: 0;
-    font-size: clamp(1.45rem, 2.4vw, 1.75rem);
-    font-weight: 600;
-  }
-  h3 a {
-    color: var(--maroon);
+  .row {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0 1.5rem;
+    padding: 1.05rem 0;
     text-decoration: none;
+    color: var(--ink);
   }
-  h3 a:hover,
-  h3 a:focus-visible {
+  .title {
+    font-size: 1.25rem;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+  .org {
+    text-align: right;
+    white-space: nowrap;
+  }
+  .row:hover .title,
+  .row:focus-visible .title {
+    color: var(--maroon);
+  }
+  .row:hover .title {
     text-decoration: underline;
-    text-decoration-color: var(--amber);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
   }
-  .who {
-    margin: 0.3rem 0 0.55rem;
-  }
-  .summary {
-    margin: 0 0 0.55rem;
-    max-width: var(--measure);
-  }
-  .topics {
-    font-size: 0.98rem;
-  }
-  @media (max-width: 40rem) {
+  @media (max-width: 44rem) {
     .row {
       grid-template-columns: 1fr;
+      gap: 0.1rem;
+      padding: 1rem 0;
     }
-    .when {
-      margin: 0 0 0.25rem;
+    .title {
+      font-size: 1.15rem;
+    }
+    .org {
+      text-align: left;
+      white-space: normal;
     }
   }
 </style>
