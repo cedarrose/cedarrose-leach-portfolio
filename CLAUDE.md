@@ -49,8 +49,8 @@ and the structured data all update automatically.
 - One typeface: Source Serif 4, at regular weights. No condensed or bold display type.
 - Colors are in `global.css`: warm brown ink, muted brown for secondary text,
   maroon only on hover, amber only for focus rings.
-- The peach dot grid behind the hero is the site's signature. Don't add other
-  decorative patterns.
+- The peach dot grid is the site's signature and sits behind every page (set on
+  `body` in `global.css`). Don't add other decorative patterns.
 - No per-item colors, gradient text, tags or keyword chips, cards with shadows, or
   scroll-triggered fade-ins.
 
