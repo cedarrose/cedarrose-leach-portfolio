@@ -1,9 +1,9 @@
 ---
 order: 3
-title: Hybrid silicon-polymer neural probe
+title: Neural Probe
 org: Biomedical Microsystems Laboratory, USC
 orgUrl: https://biomems.usc.edu/
-role: Undergraduate researcher (design, fabrication and characterization)
+role: Design, Fabrication, & Characterization
 category: research
 start: 2024-07
 end: 2025-05
@@ -23,7 +23,7 @@ links:
 publications:
   - title: Implantable Flexible GHz Waveguide for High Data Throughput Neural Recording Interfaces
     authors: Barrera, N.D., Nguyen, T.D., Ramirez, E., Leach, C.R., Abbasi, N., Molisch, A., Sideris, C., & Meng, E.
-    venue: Neural Interfaces 2025, Arlington, VA
+    venue: Neural Interfaces 2025 Conference
     date: June 2025
     kind: Conference abstract
   - title: Development and Characterization of a High-Density Flexible Neural Recording Probe
@@ -35,57 +35,49 @@ publications:
 gallery:
   - src: ../../assets/work/neural-probe/poster.png
     alt: Research poster titled Development and Characterization of a High-Density Flexible Neural Recording Probe, with sections on introduction, development and characterization.
-    caption: Symposium poster. The full PDF is linked above.
+    caption: Symposium poster
   - src: ../../assets/work/neural-probe/pcb-render.png
     alt: 3D render of a green printed circuit board with a secondary coil and pin headers.
-    caption: PCB with a secondary coil for testing the inductive coupling efficiency of the primary coil.
-  - src: ../../assets/work/neural-probe/pcb-layout.png
-    alt: Close-up of a green PCB layout showing labeled capacitors, resistors and an integrated circuit.
-    caption: Layout of the coupling test PCB.
+    caption: PCB with secondary coil for testing inductive coupling efficiency of primary coil
   - src: ../../assets/work/neural-probe/zif-adapter.jpeg
     alt: Small purple PCB with a ZIF connector and a cartoon seal printed on the silkscreen.
-    caption: ZIF-to-Molex adapter board, made 10x cooler with a seal saying hi.
+    caption: ZIF connector
 ---
 
-Since July 2024, I've been helping to design, fabricate and characterize a hybrid silicon-polymer neural recording probe.
+Since July 2024, I've been helping to design, fabricate, and characterize a hybrid silicon-polymer neural recording probe.
 
-## The idea
+This neural probe aims to combine the flexibility of polymer-based neural interfaces and the high electrode density of silicon-based neural interfaces. This hybrid approach enforces high spatial resolution neural recordings while maintaining flexible mechanical properties and biocompatibility required for neural implants. To create this novel neural probe, I am assisting in developing and testing the fabrication procedure for the flexible shank.
 
-This neural probe aims to combine the flexibility of polymer-based neural interfaces with the high electrode density of silicon-based ones. The hybrid approach enables high spatial resolution neural recordings while keeping the flexible mechanical properties and biocompatibility that neural implants require.
+I joined this lab last summer after a month of training in semiconductor fabrication processes in the cleanroom. I was able to translate this knowledge of nanofabrication to the lab's development of neural interfaces. I truly enjoy the process of creating this device. It's a ton of trial and error, brainstorming different fabrication methods and figuring out what works and what doesn't. I can think of at least six different fabrication approaches that we have undertaken, and each approach has many different variations - tweaking the mold CAD file, or the material of the coil, or the method of transferring the coil to the substrate, or the coil-forming strategies.
 
-The probe is a flexible shank carrying one to three application-specific integrated circuits (ASICs). Digitized neural recordings are transmitted through inductive coupling between the ASIC coils and the probe coil. My part has been developing and testing the fabrication procedure for the flexible shank.
+There are standard fabrication processes for creating neural probes (e.g. photolithography, deposition, etching, liftoff). However, our project requires a new fabrication approach since we are dealing with a much thicker layer of conductive material.
 
-## Why it takes so many attempts
+Throughout the process of brainstorming, designing, fabricating, and characterizing the neural probe, I have gained valuable knowledge and honed a variety of skills, including:
 
-There are standard processes for making neural probes: photolithography, deposition, etching and liftoff. Our project needs a new approach because it uses a much thicker layer of conductive material.
-
-I joined the lab after a month of training in semiconductor fabrication in the cleanroom, and I was able to carry that knowledge into the lab's work on neural interfaces. I truly enjoy the process of creating this device. It's a ton of trial and error: brainstorming fabrication methods and figuring out what works and what doesn't. We've tried at least six fabrication approaches, each with many variations: tweaking the mold CAD file, the coil material, the method of transferring the coil to the substrate, or the coil-forming strategy.
-
-## Skills I built along the way
-
-### Femtosecond laser ablation
-Precisely patterned coils from a titanium sheet for one version of the probe.
+### Femtosecond Laser Ablation
+To precisely pattern coils from a titanium sheet for one rendition of the neural probe.
 
 ### Fusion 360 CAD
-Created the mold that forms wire into the shape of the primary coil, and developed several mold variations to improve both the coil's geometry and the efficiency of the wire-forming process.
+Created the mold for forming a wire into the desired shape of the primary coil.
+Developed multiple mold variations to optimize both the coil's geometry and the efficiency of the wire-forming process.
 
-### KLayout
+### K-Layout
 Designed 2D coil patterns for fabrication on silicon wafers.
 
-### Device packaging
-Soldered and molded coils to build the primary coil and the probe shank, and attached SMA connectors for testing and measurement.
+### Device Packaging
+Soldering and coil molding to create the primary coil and neural probe shank. Attached SMA connectors for testing and measurements.
 
-### S-parameter data analysis
-Converted S-parameters to impedance (S to Z) to analyze the primary coil and derive its inductance.
+### S-param Data Analytics
+S to Z conversion to analyze impedance of primary coil and derivation of inductance.
 
-### COMSOL simulations
-Learned COMSOL Multiphysics to simulate the probe's magnetic field, inductance, Q-factor and resonant frequency, and used the results to improve coil performance.
+### COMSOL Simulations
+Learned COMSOL, simulating magnetic field and inductance properties of the probe to optimize coil performance.
 
-### Parylene deposition and etching
-Deposited parylene in the cleanroom for several versions of the probe. Parylene acts as both the insulator and the substrate.
+### Parylene Deposition & Etching
+Worked in the cleanroom depositing parylene for various renditions of the probe. Parylene serves as an insulator and a substrate for the probe.
 
-### Analog-to-digital converters
-Researched and selected ADC evaluation boards to digitize probe data, focusing on sampling rate and bit resolution.
+### Analog-to-Digital Converter (ADC)
+Researched and selected ADC eval boards as to digitize probe data. Focused on specifications such as sampling rate & bit resolution.
 
-### PCB design
-Designed two custom PCBs. The main one is a test tool for measuring the inductive coupling efficiency of the probe's primary coil: I configured dual RF amplifiers to measure voltage differences across the ports and calculated trace widths for impedance matching. The second board adapts a ZIF connector to Molex pins, and I made it 10x cooler with a cute seal saying hi.
+### PCB Design
+Designed two custom PCBs. The latest is a testing tool for evaluating inductive coupling efficiency of the neural probe's primary coil. I configured dual RF amplifiers to measure voltage differentials across the ports and calculated trace widths for impedance matching. The second board just adapts a ZIF connector to Molex pins, but I made it 10x cooler with cute seal saying hi.

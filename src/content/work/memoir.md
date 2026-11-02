@@ -3,48 +3,46 @@ order: 7
 title: Memoir
 org: Memoir Photos
 orgUrl: https://memoirphotos.co
-role: Co-founder
+role: An Interactive & Accessible Photo Library for the Visually Impaired
 category: building
 start: 2024-09
 end: 2025-08
 summary: Co-founded an audio-based, accessible photo library that lets blind and visually impaired people explore, organize and relive their photos.
 tags: [Accessibility, Mobile app, React Native, LLM image captioning, Supabase, Startup]
 awards:
-  - Audience Choice Award and Judges' Honorable Mention, SEP Launch Day
-  - First place, USC Trojan Tank pitch competition
-  - Lloyd Greif Center Catalyst Micro Grant
+  - Recipient of the Audience Choice Award + Judges Honorable Mention at SEP Launch Day
+  - Winner of USC Trojan Tank Competition
+  - Recipient of Lloyd Greif Catalyst Micro Grant
 links:
-  - label: memoirphotos.co
-    url: https://memoirphotos.co
-  - label: Instagram (@memoirphotos_)
+  - label: "@memoirphotos_"
     url: https://instagram.com/memoirphotos_
   - label: contact.memoirphotos@gmail.com
     url: mailto:contact.memoirphotos@gmail.com
+  - label: memoirphotos.co
+    url: https://memoirphotos.co
 gallery:
   - src: ../../assets/work/memoir/logo.png
     alt: Memoir logo with the tagline "The Photo Library for the Visually Impaired".
-  - src: ../../assets/work/memoir/team.jpeg
-    alt: Memoir's four co-founders, Marshall Graves, Moksh Jhaveri, Isannah Marley and Cedar Rose Leach, above two phone screenshots of the app.
-    caption: The Memoir team.
+    caption: Memoir
   - src: ../../assets/work/memoir/launch-day.png
     alt: The Memoir team on stage holding an award check at SEP Launch Day.
-    caption: Accepting awards at SEP Launch Day.
+    caption: Judges Award + Honorable Mention @ SEP Launch Day
   - src: ../../assets/work/memoir/ui-flow.png
     alt: Three phone screens showing Memoir's photo list, a photo with its AI-generated description, and search.
-    caption: The app's main screens.
+    caption: UI Flow
   - src: ../../assets/work/memoir/features.png
     alt: Three feature icons labeled AI generated image captioning, search and filter by content and faces, and immersive and accessible photo browsing.
-    caption: Core features.
+    caption: Features
 ---
 
-People with visual impairments often struggle to understand images on the web, photos sent by friends, or the memories stored in their own photo libraries. That's why we built Memoir, the only audio-based photo library for the visually impaired.
+Incubated at [SEP (Sigma Eta Pi)](https://uscsep.com/), Accelerated at [Troy Labs](https://www.troylabs.vc/)
 
-## What Memoir does
+For the past few months, I've had the privilege of working on something deeply meaningful.
 
-Memoir lets users interact with, organize and relive the emotional significance of their photo collections. It writes AI-generated captions for every image and lets users search and filter photos by their content and the faces in them, create and share custom albums, and casually browse through their memories. Paired with screen readers like Apple's VoiceOver or Google's TalkBack, Memoir turns visual information into an interactive, audio-based experience for blind users.
+People with visual impairment often face challenges understanding images on the web, photos sent by friends, or reliving cherished memories stored in their personal photo libraries. That's why we're building Memoir.
 
-## Building it
+As an audio-based photo library, Memoir enables users to interact with, organize, and relive the emotional significance of their photo collections. Our platform creates AI-generated captions to describe every image and allows users to search or filter photos based on content, create and share custom albums, and casually browse through their memories. When paired with screen readers like Apple's VoiceOver or Google's TalkBack, Memoir transforms visual information into an interactive, audio-based experience for blind users.
 
-We built and deployed a full-stack mobile app with a scalable database, authentication and LLM APIs for image captioning. Memoir has more than 50 blind users and has raised more than $6,000 in funding. It was incubated at [SEP (Sigma Eta Pi)](https://uscsep.com/) and accelerated at [Troy Labs](https://www.troylabs.vc/).
+I've had the most incredible time working with my co-founders, Moksh Jhaveri, Marshall Graves, and Isannah Marley. We are currently building and beta testing, and I'm excited to share more about Memoir's journey in the near future.
 
-I've had the most incredible time working with my co-founders, Moksh Jhaveri, Marshall Graves and Isannah Marley. Interested in learning more? We'd love to hear from you.
+Interested in learning more about Memoir? We'd love to hear from you.

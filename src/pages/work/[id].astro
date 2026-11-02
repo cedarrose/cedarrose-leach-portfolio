@@ -80,9 +80,9 @@ const jsonLd: object[] = [
       <p class="meta when"><time datetime={d.start}>{formatRange(d.start, d.end)}</time></p>
       <h1>{d.title}</h1>
       <p class="who">
-        {d.role}, {d.orgUrl ? <a href={d.orgUrl}>{d.org}</a> : d.org}
+        <span>{d.role}</span>
+        <span>{d.orgUrl ? <a href={d.orgUrl}>{d.org}</a> : d.org}</span>
       </p>
-      <p class="lede">{d.summary}</p>
     </header>
 
     {
@@ -136,10 +136,6 @@ const jsonLd: object[] = [
       )
     }
 
-    <div class="prose">
-      <Content />
-    </div>
-
     {
       d.publications.length > 0 && (
         <section class="pubs" aria-labelledby="pubs-title">
@@ -157,6 +153,10 @@ const jsonLd: object[] = [
         </section>
       )
     }
+
+    <div class="prose">
+      <Content />
+    </div>
 
     {
       d.gallery.length > 0 && (
@@ -243,14 +243,11 @@ const jsonLd: object[] = [
     margin: 0.9rem 0 0;
     color: var(--muted);
   }
+  .who span {
+    display: block;
+  }
   .who a {
     color: inherit;
-  }
-  .lede {
-    margin: 1.75rem 0 0;
-    font-size: 1.2rem;
-    line-height: 1.6;
-    max-width: var(--measure);
   }
 
   .facts {
@@ -303,8 +300,16 @@ const jsonLd: object[] = [
   .prose :global(li) {
     margin-bottom: 0.35rem;
   }
+  .prose :global(blockquote) {
+    margin: 0 0 1.1rem;
+    padding-left: 1.25rem;
+    border-left: 1px solid var(--rule);
+    color: var(--muted);
+  }
 
-  .pubs,
+  .pubs {
+    margin-top: 2.5rem;
+  }
   .gallery {
     margin-top: 3.5rem;
   }

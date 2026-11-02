@@ -35,7 +35,8 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 2. Fill in the frontmatter; copy an existing file as a template. `order` sets the
    position in the home page list (1 = top; renumber the others to fit). `category` is one of
    `experience`, `research`, `building`, `mentoring`. Dates are `YYYY-MM`; `end` can be `present`.
-3. Write `summary` as one sentence: it opens the project page and appears in llms.txt.
+3. Write `summary` as one sentence. It isn't shown on the page; it's the page's meta
+   description and appears in llms.txt. `role` is the subtitle shown under the title.
    The home page shows only the years, title and organization (the organization is
    hidden when the title already names it).
 4. Every gallery image needs real `alt` text describing what's in it. Add a `caption` when
@@ -44,6 +45,11 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 
 The home page, project page, llms.txt, llms-full.txt, the Markdown copy, the sitemap
 and the structured data all update automatically.
+
+## Cedar's writing
+
+Project write-ups are in Cedar's own words. Don't rewrite, restructure or add
+headings to them; fix only clear misspellings, and only when asked to edit.
 
 ## Design rules
 
