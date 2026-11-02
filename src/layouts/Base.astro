@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Doodles from '../components/Doodles.astro';
+import PixelBlob from '../components/PixelBlob.astro';
 import { person, SITE_URL } from '../site';
 
 interface Props {
@@ -62,7 +63,9 @@ const year = new Date().getFullYear();
       <p>© {year} {person.name}</p>
       <p><a href="/llms.txt">Are you an agent? Start here.</a></p>
     </footer>
-    <Doodles page={page} />
+    <Doodles page={page}>
+      <PixelBlob />
+    </Doodles>
   </body>
 </html>
 

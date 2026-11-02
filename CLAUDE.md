@@ -23,7 +23,8 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 - `src/pages/llms.txt.ts`, `llms-full.txt.ts`, `work/[id].md.ts`, `robots.txt.ts`:
   agent-facing files, all generated from the same content. Never edit their
   output by hand, and never duplicate content into them.
-- `src/components/Doodles.astro`: the layer for Cedar's drawn characters.
+- `src/components/Doodles.astro`: the layer for Cedar's characters.
+- `src/components/PixelBlob.astro`: the orange pixel blob who walks the margin dots.
 - `src/styles/global.css`: colors, type, and shared styles.
 - `src/assets/`: images. Put new ones in `src/assets/work/<project-id>/`.
 - `public/files/`: PDFs (resume, posters). `public/og.png`: social preview image.
@@ -49,17 +50,22 @@ and the structured data all update automatically.
 - One typeface: Source Serif 4, at regular weights. No condensed or bold display type.
 - Colors are in `global.css`: warm brown ink, muted brown for secondary text,
   maroon only on hover, amber only for focus rings.
-- The peach dot grid is the site's signature and sits behind every page (set on
-  `body` in `global.css`). Don't add other decorative patterns.
+- The peach dot grid is the site's signature. It's pinned to the window behind every
+  page (`body::before` in `global.css`) and fades out behind the reading column, so
+  it only shows in the margins; on narrow screens it's faint everywhere. Don't add
+  other decorative patterns.
 - No per-item colors, gradient text, tags or keyword chips, cards with shadows, or
   scroll-triggered fade-ins.
 
 ## Decorative characters (doodles)
 
-Add them in `Doodles.astro` (or components it renders). Rules:
+Add them in `Doodles.astro` (or components it renders). The pixel blob is the
+first one: he walks along a dot row in one margin, pauses, hops to the row above or
+below, and smiles when hovered. He's hidden when the margins are too narrow. Rules:
 
 - The layer is `aria-hidden` and `pointer-events: none`; characters must never
-  cover or replace text.
+  cover or replace text, so keep them in the margins. A character may set
+  `pointer-events: auto` on itself for hover effects.
 - Prefer CSS animation; keep any JavaScript small and local to the character.
 - Wrap motion in `@media (prefers-reduced-motion: no-preference)`.
 - Images go in `src/assets/doodles/` and are rendered with `<Image />`.

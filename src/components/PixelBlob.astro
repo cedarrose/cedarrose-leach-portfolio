@@ -1,0 +1,305 @@
+---
+/**
+ * A little orange pixel blob who lives in the page margins. He walks slowly
+ * along a row of background dots, pauses, hops up or down to the next row,
+ * and turns around. Hovering over him makes him stop and smile.
+ *
+ * Decorative only: rendered inside the aria-hidden Doodles layer, never over
+ * the reading column, and hidden when the margins are too narrow. With
+ * reduced motion on, he sits still in the corner (and still smiles on hover).
+ */
+
+// Pixel map, 14 x 11, drawn facing right. One character per pixel:
+// O outline, B body, H highlight, E eye, . empty. Feet are drawn separately.
+const body = [
+  '....OOOOOO....',
+  '..OOBBBBBBOO..',
+  '.OBHHBBBBBBBO.',
+  '.OBHBBBBBBBBO.',
+  'OBBBBBBEBBEBBO',
+  'OBBBBBBEBBEBBO',
+  'OBBBBBBBBBBBBO',
+  'OBBBBBBBBBBBBO',
+  '.OBBBBBBBBBBO.',
+  '..OOOOOOOOOO..',
+];
+const feetA = '..OO......OO..';
+const feetB = '...OO....OO...';
+
+const fill: Record<string, string> = {
+  O: 'var(--blob-line)',
+  B: 'var(--blob-body)',
+  H: 'var(--blob-shine)',
+  E: 'var(--blob-eye)',
+};
+
+type Px = { x: number; y: number; c: string };
+const toPixels = (rows: string[], y0 = 0): Px[] =>
+  rows.flatMap((row, y) =>
+    [...row].flatMap((ch, x) => (ch in fill ? [{ x, y: y + y0, c: ch }] : [])),
+  );
+
+const bodyPx = toPixels(body);
+const eyes = bodyPx.filter((p) => p.c === 'E');
+const shell = bodyPx.filter((p) => p.c !== 'E');
+const feetAPx = toPixels([feetA], 10);
+const feetBPx = toPixels([feetB], 10);
+
+// Faces: a small flat mouth, and a smile with rosy cheeks for hovering.
+const mouth: Px[] = [
+  { x: 8, y: 6, c: 'E' },
+  { x: 9, y: 6, c: 'E' },
+];
+const smile: Px[] = [
+  { x: 7, y: 6, c: 'E' },
+  { x: 10, y: 6, c: 'E' },
+  { x: 8, y: 7, c: 'E' },
+  { x: 9, y: 7, c: 'E' },
+];
+const cheeks: Px[] = [
+  { x: 5, y: 6, c: 'K' },
+  { x: 12, y: 6, c: 'K' },
+];
+const colorOf = (c: string) => (c === 'K' ? 'var(--blob-cheek)' : fill[c]);
+---
+
+<div class="blob" data-blob hidden>
+  <div class="bounce">
+    <svg viewBox="0 0 14 11" width="42" height="33" shape-rendering="crispEdges" aria-hidden="true">
+      <g class="body">
+        {shell.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={colorOf(p.c)} />)}
+        <g class="eyes">{eyes.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={colorOf(p.c)} />)}</g>
+        <g class="mouth">{mouth.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={colorOf(p.c)} />)}</g>
+        <g class="smile">
+          {[...smile, ...cheeks].map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={colorOf(p.c)} />)}
+        </g>
+      </g>
+      <g class="feet-a">{feetAPx.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={colorOf(p.c)} />)}</g>
+      <g class="feet-b">{feetBPx.map((p) => <rect x={p.x} y={p.y} width="1" height="1" fill={colorOf(p.c)} />)}</g>
+    </svg>
+  </div>
+</div>
+
+<style>
+  .blob {
+    --blob-line: #b5521b;
+    --blob-body: #f5892c;
+    --blob-shine: #ffc684;
+    --blob-eye: #3b2218;
+    --blob-cheek: #ff9a8a;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 42px;
+    height: 33px;
+    pointer-events: auto;
+    will-change: transform;
+  }
+  .blob[hidden] {
+    display: none;
+  }
+  svg {
+    display: block;
+    overflow: visible;
+  }
+  /* Facing left mirrors the drawing. */
+  .blob.left svg {
+    transform: scaleX(-1);
+  }
+
+  .smile,
+  .feet-b,
+  .blob.blink .eyes {
+    visibility: hidden;
+  }
+  .blob.happy .smile {
+    visibility: visible;
+  }
+  .blob.happy .mouth {
+    visibility: hidden;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Two-step waddle while walking: feet swap and the body bobs a pixel. */
+    .blob.walking .feet-a {
+      animation: step-a 0.7s step-end infinite;
+    }
+    .blob.walking .feet-b {
+      animation: step-b 0.7s step-end infinite;
+    }
+    .blob.walking .body {
+      animation: bob 0.7s step-end infinite;
+    }
+    /* A small happy hop when hovered. */
+    .blob.happy .bounce {
+      animation: happy-hop 0.45s ease-out;
+    }
+  }
+
+  @keyframes step-a {
+    0% { visibility: visible; }
+    50% { visibility: hidden; }
+  }
+  @keyframes step-b {
+    0% { visibility: hidden; }
+    50% { visibility: visible; }
+  }
+  @keyframes bob {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-1px); }
+  }
+  @keyframes happy-hop {
+    0% { transform: translateY(0); }
+    40% { transform: translateY(-7px); }
+    100% { transform: translateY(0); }
+  }
+</style>
+
+<script>
+  // Keep in sync with --page (68rem) and --gutter in global.css.
+  const PAGE = 68 * 16;
+  const GRID = 40; // dot spacing; dot centers are at multiples of 40px
+  const W = 42;
+  const H = 33;
+  const SPEED = 12; // px per second: slow on purpose
+  const HOP_MS = 700;
+
+  const el = document.querySelector<HTMLElement>('[data-blob]');
+  if (el) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+    const side: 'left' | 'right' = Math.random() < 0.5 ? 'left' : 'right';
+
+    // The dotted margin the blob may use, as dot-column and dot-row limits.
+    let cols = { min: 0, max: 0 };
+    let rows = { min: 0, max: 0 };
+
+    let cx = 0; // center x, on a dot column
+    let rowY = 0; // y of the dot row he stands on
+    let dir = 1;
+    let mode: 'walk' | 'pause' | 'hop' = 'pause';
+    let targetX = 0;
+    let wait = 1500;
+    let hop = { t: 0, fromY: 0, toY: 0 };
+    let hovered = false;
+    let last = performance.now();
+
+    const gutter = () => Math.min(48, Math.max(20, innerWidth * 0.05));
+
+    function measure(): boolean {
+      const textEdge = Math.max(0, (innerWidth - PAGE) / 2) + gutter();
+      const room = textEdge - 20; // keep clear of the text
+      let lo: number, hi: number;
+      if (side === 'left') {
+        lo = GRID;
+        hi = Math.floor((room - W / 2) / GRID) * GRID;
+      } else {
+        lo = Math.ceil((innerWidth - room + W / 2) / GRID) * GRID;
+        hi = Math.floor((innerWidth - W / 2 - 8) / GRID) * GRID;
+      }
+      cols = { min: lo, max: hi };
+      rows = { min: GRID * 4, max: Math.floor((innerHeight - 24) / GRID) * GRID };
+      return hi - lo >= GRID && rows.max > rows.min;
+    }
+
+    const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
+
+    function place(y = rowY) {
+      el!.style.transform = `translate(${cx - W / 2}px, ${y - H - 1}px)`;
+      el!.classList.toggle('left', dir < 0);
+    }
+
+    function setup() {
+      const ok = measure();
+      el!.hidden = !ok;
+      if (!ok) return false;
+      cx = clamp(cx || (side === 'left' ? cols.min : cols.max), cols.min, cols.max);
+      rowY = clamp(rowY || rows.max, rows.min, rows.max);
+      place();
+      return true;
+    }
+
+    function startWalk() {
+      targetX = dir > 0 ? cols.max : cols.min;
+      if (targetX === cx) {
+        dir = -dir;
+        targetX = dir > 0 ? cols.max : cols.min;
+      }
+      mode = 'walk';
+      el!.classList.add('walking');
+    }
+
+    function startHop() {
+      const canUp = rowY - GRID >= rows.min;
+      const canDown = rowY + GRID <= rows.max;
+      const up = canUp && (!canDown || Math.random() < 0.6);
+      hop = { t: 0, fromY: rowY, toY: rowY + (up ? -GRID : GRID) };
+      mode = 'hop';
+    }
+
+    function blink() {
+      if (!hovered) {
+        el!.classList.add('blink');
+        setTimeout(() => el!.classList.remove('blink'), 140);
+      }
+      setTimeout(blink, 2500 + Math.random() * 4000);
+    }
+
+    function tick(now: number) {
+      const dt = Math.min(64, now - last);
+      last = now;
+      // A hop in progress always lands, even if he's hovered mid-air.
+      if (!el!.hidden && (!hovered || mode === 'hop')) {
+        if (mode === 'walk') {
+          const step = (SPEED * dt) / 1000;
+          cx = Math.abs(targetX - cx) <= step ? targetX : cx + Math.sign(targetX - cx) * step;
+          if (cx === targetX) {
+            mode = 'pause';
+            wait = 1200 + Math.random() * 1800;
+            el!.classList.remove('walking');
+          }
+          place();
+        } else if (mode === 'pause') {
+          wait -= dt;
+          if (wait <= 0) startHop();
+        } else if (mode === 'hop') {
+          hop.t = Math.min(1, hop.t + dt / HOP_MS);
+          const y = hop.fromY + (hop.toY - hop.fromY) * hop.t - Math.sin(Math.PI * hop.t) * 16;
+          place(y);
+          if (hop.t === 1) {
+            rowY = hop.toY;
+            dir = -dir;
+            startWalk();
+          }
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    el.addEventListener('pointerenter', () => {
+      hovered = true;
+      el.classList.remove('blink', 'walking');
+      el.classList.add('happy');
+    });
+    el.addEventListener('pointerleave', () => {
+      setTimeout(() => {
+        hovered = false;
+        el.classList.remove('happy');
+        if (mode === 'walk') el.classList.add('walking');
+        last = performance.now();
+      }, 500);
+    });
+
+    addEventListener('resize', () => {
+      if (setup() && !reduce.matches && mode === 'pause' && !el.classList.contains('walking')) {
+        targetX = clamp(targetX, cols.min, cols.max);
+      }
+    });
+
+    // With reduced motion he just sits in the bottom corner of the margin.
+    if (setup() && !reduce.matches) startWalk();
+    if (!reduce.matches) {
+      setTimeout(blink, 3000);
+      requestAnimationFrame(tick);
+    }
+  }
+</script>

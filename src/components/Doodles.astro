@@ -1,6 +1,6 @@
 ---
 /**
- * Decorative layer for Cedar's drawn characters. Empty for now.
+ * Decorative layer for Cedar's characters (currently the pixel blob).
  *
  * Rules for anything added here (see CLAUDE.md):
  * - Purely decorative: the layer is aria-hidden and ignores pointer events,
@@ -29,8 +29,5 @@ const { page = 'home' } = Astro.props;
     pointer-events: none;
     z-index: 5;
     overflow: hidden;
-  }
-  .doodles:empty {
-    display: none;
   }
 </style>

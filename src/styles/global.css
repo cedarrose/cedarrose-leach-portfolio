@@ -36,11 +36,7 @@ html {
 
 body {
   margin: 0;
-  /* The peach dot grid from the original site, behind every page. */
-  background-color: var(--paper);
-  background-image: radial-gradient(var(--dot) 2px, transparent 2.5px);
-  background-size: 40px 40px;
-  background-position: 20px 20px;
+  background: var(--paper);
   color: var(--ink);
   font-family: var(--serif);
   font-size: 1.0625rem;
@@ -49,6 +45,48 @@ body {
   font-optical-sizing: auto;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+}
+
+/* The peach dot grid from the original site. It's pinned to the window and
+   fades out behind the reading column, so it only shows in the margins.
+   Dot centers sit on a 40px grid from the window's top-left corner
+   (x and y = 0, 40, 80, ...); the pixel blob walks along those rows. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(var(--dot) 2px, transparent 2.5px);
+  background-size: 40px 40px;
+  background-position: 20px 20px;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0,
+    #000 calc(50% - 37rem),
+    transparent calc(50% - 30rem),
+    transparent calc(50% + 30rem),
+    #000 calc(50% + 37rem),
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0,
+    #000 calc(50% - 37rem),
+    transparent calc(50% - 30rem),
+    transparent calc(50% + 30rem),
+    #000 calc(50% + 37rem),
+    #000 100%
+  );
+}
+
+/* On narrow screens there are no margins, so the dots stay faint everywhere. */
+@media (max-width: 66rem) {
+  body::before {
+    -webkit-mask-image: none;
+    mask-image: none;
+    opacity: 0.4;
+  }
 }
 
 img {
