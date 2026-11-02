@@ -11,7 +11,7 @@ summary: Validated three wafer anti-charging agents for electron beam lithograph
 tags: [Electron beam lithography, Microelectronics, Process engineering, Design of experiments]
 ---
 
-This summer, I had the privilege of working with the Electron Beam Lithography (EBL) Team at Northrop Grumman.
+In summer 2025, I had the privilege of working with the Electron Beam Lithography (EBL) Team at Northrop Grumman.
 
 Lithography is the process of creating patterns on a semiconductor wafer using a beam of photons, or in the case where nanometer precision is required, electrons. Our team fabricates the smallest component of a microprocessor: the gate of a transistor. The gate is the key component that controls the flow of current through the transistor, and is typically only a few nanometers wide.
 

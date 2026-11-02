@@ -33,12 +33,12 @@ The reason I love this club so much is that we **build** simply for the **fun of
 
 ### SmarTender
 
-Last year, I worked with my team to create an autonomous assembly line robot that dispenses and prepares beverages depending on user input.
+During the 2023–24 school year, I worked with my team to create an autonomous assembly line robot that dispenses and prepares beverages depending on user input.
 
 We modeled its movement mechanisms after 3D printer linear rails and implemented different beverage combinations with an ice-dispensing function and some fun LEDS.
 
 ### BCD - Brain Controlled Drone
 
-This year, I made an EEG-controlled drone using a custom brain-computer interface.
+During the 2024–25 school year, I made an EEG-controlled drone using a custom brain-computer interface.
 
 We implemented drone flight commands trained on processed neural signals retrieved from the BCI.

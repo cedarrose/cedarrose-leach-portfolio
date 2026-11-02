@@ -32,7 +32,7 @@ gallery:
     caption: Scribe tool used to cleave wafer - I made a Standard Operating Procedure Tutorial (SOP) for this tool
 ---
 
-I had the privilege of being part of the inaugural cohort of the Microelectronics Commons Scholars Program, which launched this summer. The program featured two immersive phases: a two-week CA DREAMS Cleanroom Gateway at USC's John O'Brien Nanofabrication Laboratory, where I received hands-on training, followed by a six-week internship.
+I had the privilege of being part of the inaugural cohort of the Microelectronics Commons Scholars Program, which launched in summer 2024. The program featured two immersive phases: a two-week CA DREAMS Cleanroom Gateway at USC's John O'Brien Nanofabrication Laboratory, where I received hands-on training, followed by a six-week internship.
 
 During the Cleanroom Gateway, I gained skills in wafer cleaning and handling, photolithography, deposition, etching, metrology, machine operation, and cleanroom safety practices. This foundational training prepared me for my internship.
 

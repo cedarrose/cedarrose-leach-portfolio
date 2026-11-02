@@ -43,6 +43,6 @@ People with visual impairment often face challenges understanding images on the 
 
 As an audio-based photo library, Memoir enables users to interact with, organize, and relive the emotional significance of their photo collections. Our platform creates AI-generated captions to describe every image and allows users to search or filter photos based on content, create and share custom albums, and casually browse through their memories. When paired with screen readers like Apple's VoiceOver or Google's TalkBack, Memoir transforms visual information into an interactive, audio-based experience for blind users.
 
-I've had the most incredible time working with my co-founders, Moksh Jhaveri, Marshall Graves, and Isannah Marley. We are currently building and beta testing, and I'm excited to share more about Memoir's journey in the near future.
+I've had the most incredible time working with my co-founders, Moksh Jhaveri, Marshall Graves, and Isannah Marley.
 
 Interested in learning more about Memoir? We'd love to hear from you.
