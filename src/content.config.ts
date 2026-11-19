@@ -42,6 +42,10 @@ const work = defineCollection({
           }),
         )
         .default([]),
+      // Skills shown as a table at the end of the write-up.
+      skills: z.array(z.object({ name: z.string(), detail: z.string() })).default([]),
+      // Show the photos before the write-up instead of after it.
+      photosFirst: z.boolean().default(false),
       gallery: z
         .array(z.object({ src: image(), alt: z.string(), caption: z.string().optional() }))
         .default([]),

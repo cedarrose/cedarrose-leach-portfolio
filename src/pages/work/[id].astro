@@ -154,12 +154,45 @@ const jsonLd: object[] = [
       )
     }
 
+    {
+      d.photosFirst && d.gallery.length > 0 && (
+        <section class="gallery" aria-labelledby="gallery-title">
+          <h2 id="gallery-title">Photos and figures</h2>
+          <div class="breakout">
+            <Carousel items={d.gallery} label={`Photos and figures for ${d.title}`} />
+          </div>
+        </section>
+      )
+    }
+
     <div class="prose">
       <Content />
     </div>
 
     {
-      d.gallery.length > 0 && (
+      d.skills.length > 0 && (
+        <table class="skills">
+          <caption class="visually-hidden">Skills from this project</caption>
+          <thead>
+            <tr>
+              <th scope="col">Skill</th>
+              <th scope="col">What I did</th>
+            </tr>
+          </thead>
+          <tbody>
+            {d.skills.map((k) => (
+              <tr>
+                <th scope="row">{k.name}</th>
+                <td>{k.detail}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )
+    }
+
+    {
+      !d.photosFirst && d.gallery.length > 0 && (
         <section class="gallery" aria-labelledby="gallery-title">
           <h2 id="gallery-title">Photos and figures</h2>
           <div class="breakout">
@@ -302,7 +335,54 @@ const jsonLd: object[] = [
   .pubs {
     margin-top: 2.5rem;
   }
+
+  .skills {
+    width: 100%;
+    margin-top: 0.5rem;
+    border-collapse: collapse;
+  }
+  .skills thead th {
+    padding: 0 0 0.6rem;
+    text-align: left;
+    font-weight: 400;
+    font-size: 0.9375rem;
+    color: var(--muted);
+    border-bottom: 1px solid var(--rule);
+  }
+  .skills tbody th,
+  .skills td {
+    padding: 0.85rem 0;
+    vertical-align: top;
+    text-align: left;
+    border-bottom: 1px solid var(--rule);
+  }
+  .skills tbody th {
+    width: 15rem;
+    padding-right: 1.5rem;
+    font-weight: 450;
+  }
+  @media (max-width: 40rem) {
+    .skills thead {
+      display: none;
+    }
+    .skills tr,
+    .skills tbody th,
+    .skills td {
+      display: block;
+      width: auto;
+    }
+    .skills tbody th {
+      padding: 0.85rem 0 0.15rem;
+      border-bottom: 0;
+    }
+    .skills td {
+      padding-top: 0;
+    }
+  }
   .gallery {
+    margin-top: 3.5rem;
+  }
+  .gallery + .prose {
     margin-top: 3.5rem;
   }
   .pubs h2,

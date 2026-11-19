@@ -41,11 +41,13 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 3. Write `summary` as one sentence. It isn't shown on the page; it's the page's meta
    description and appears in llms.txt. `role` is the subtitle shown under the title.
    The home page shows only the years, title and organization (the organization is
-   hidden when the title already names it).
+   hidden when the title starts with it).
 4. Every gallery image needs real `alt` text describing what's in it. Add a `caption` when
    there's more to say.
 5. Papers, abstracts and posters go in `publications`; they appear on the project page.
-6. Gallery images appear in the photo carousel, in the order listed.
+6. Gallery images appear in the photo carousel, in the order listed. The carousel
+   goes after the write-up, or before it if `photosFirst: true`.
+7. Optional `skills` (name + detail) show as a table at the end of the write-up.
 
 The home page, project page, llms.txt, llms-full.txt, the Markdown copy, the sitemap
 and the structured data all update automatically.

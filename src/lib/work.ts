@@ -81,6 +81,9 @@ export function workToMarkdown(w: Work, headingLevel = 1): string {
     .replace(/^(#{1,5}) /gm, (_m, hashes: string) => `${'#'.repeat(Math.min(hashes.length + headingLevel - 1, 6))} `)
     .replace(/\]\((\/[^)]*)\)/g, (_m, path: string) => `](${absolute(path)})`);
   lines.push(body, '');
+  if (d.skills.length) {
+    lines.push(...d.skills.map((s) => `- ${s.name}: ${s.detail}`), '');
+  }
   const captions = d.gallery.filter((g) => g.caption);
   if (captions.length) {
     lines.push('Figures:', ...d.gallery.map((g) => `- ${g.caption ?? g.alt}`), '');
