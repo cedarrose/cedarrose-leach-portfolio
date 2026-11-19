@@ -90,10 +90,14 @@ const jsonLd: object[] = [
           <h1>{d.title}</h1>
         )
       }
-      <p class="who">
-        <span>{d.role}</span>
-        <span>{d.orgUrl ? <a href={d.orgUrl}>{d.org}</a> : d.org}</span>
-      </p>
+      {
+        !d.hideByline && (
+          <p class="who">
+            <span>{d.role}</span>
+            <span>{d.orgUrl ? <a href={d.orgUrl}>{d.org}</a> : d.org}</span>
+          </p>
+        )
+      }
     </header>
 
     {

@@ -8,6 +8,7 @@ start: 2024-09
 end: 2025-08
 summary: Co-founded an audio-based, accessible photo library that lets blind and visually impaired people explore, organize and relive their photos.
 tags: [Accessibility, Mobile app, React Native, LLM image captioning, Supabase, Startup]
+hideByline: true
 titleImage:
   src: ../../assets/work/memoir/logo-title.png
   alt: Memoir logo with the tagline "The Photo Library for the Visually Impaired".

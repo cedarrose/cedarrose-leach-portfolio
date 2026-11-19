@@ -54,7 +54,8 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 8. Optional `awards` (title + detail) show as a row of pixel-starred awards under the
    title. Optional `titleImage` (src + alt) replaces the title text with an image, like
    a logo; the title stays in the HTML for agents. Optional `logo` (src + alt) shows a
-   small logo on the right, in line with the date. `accentHeadings: true` makes the
+   small logo on the right, in line with the date. `hideByline: true` hides the
+   subtitle and organization under the title (used on Memoir, whose logo says it). `accentHeadings: true` makes the
    write-up's `###` sub-headings bold orange (used on USC Makers). Links can take `icon: instagram` or `icon: mail`.
 9. To put photos inside a write-up (for example under each sub-project), write a
    paragraph of only Markdown images: `![alt text](../../assets/work/<id>/x.jpeg "Caption")`,
