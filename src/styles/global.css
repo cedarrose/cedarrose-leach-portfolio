@@ -9,6 +9,8 @@
   --muted: #85756f;
   --maroon: #7a1f1f;
   --amber: #e08a00;
+  /* Award titles: the deep orange of the pixel blob's outline. */
+  --award: #b5521b;
   --dot: #f5dcc1;
   --rule: #efe4d8;
   --wash: #fcf8f3;

@@ -51,6 +51,10 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
    above the carousel. Media goes after the write-up under a "Photos and figures"
    heading, or, with `photosFirst: true`, right before the write-up with no visible heading.
 7. Optional `skills` (name + detail) show as a table at the end of the write-up.
+8. Optional `awards` (title + detail) show as a row of pixel-starred awards under the
+   title. Optional `titleImage` (src + alt) replaces the title text with an image, like
+   a logo; the title stays in the HTML for agents. Links can take `icon: instagram` or
+   `icon: mail`.
 
 The home page, project page, llms.txt, llms-full.txt, the Markdown copy, the sitemap
 and the structured data all update automatically.
@@ -66,7 +70,8 @@ headings to them; fix only clear misspellings, and only when asked to edit.
   publications or keyword lists there, just a link to each project.
 - One typeface: Source Serif 4, at regular weights. No condensed or bold display type.
 - Colors are in `global.css`: warm brown ink, muted brown for secondary text,
-  maroon only on hover, amber only for focus rings.
+  maroon only on hover, amber only for focus rings. The one exception: award titles
+  use `--award`, the deep orange of the pixel blob, next to small orange pixel stars.
 - The margins hold two subtle, line-drawn silicon wafers (die grid, sketchy rim,
   notch, a few inked dies), pinned to the window and kept out of the text column.
   They're hidden on narrow screens. Keep them drawing-like, never photorealistic,

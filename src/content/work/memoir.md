@@ -2,28 +2,30 @@
 order: 7
 title: Memoir
 org: Memoir Photos
-orgUrl: https://memoirphotos.co
 role: An Interactive & Accessible Photo Library for the Visually Impaired
 category: building
 start: 2024-09
 end: 2025-08
 summary: Co-founded an audio-based, accessible photo library that lets blind and visually impaired people explore, organize and relive their photos.
 tags: [Accessibility, Mobile app, React Native, LLM image captioning, Supabase, Startup]
+titleImage:
+  src: ../../assets/work/memoir/logo-title.png
+  alt: Memoir logo with the tagline "The Photo Library for the Visually Impaired".
 awards:
-  - Recipient of the Audience Choice Award + Judges Honorable Mention at SEP Launch Day
-  - Winner of USC Trojan Tank Competition
-  - Recipient of Lloyd Greif Catalyst Micro Grant
+  - title: Audience Choice Award + Judges Honorable Mention
+    detail: SEP Launch Day
+  - title: Winner
+    detail: USC Trojan Tank Competition
+  - title: Catalyst Micro Grant Recipient
+    detail: Lloyd Greif Center
 links:
   - label: "@memoirphotos_"
     url: https://instagram.com/memoirphotos_
+    icon: instagram
   - label: contact.memoirphotos@gmail.com
     url: mailto:contact.memoirphotos@gmail.com
-  - label: memoirphotos.co
-    url: https://memoirphotos.co
+    icon: mail
 gallery:
-  - src: ../../assets/work/memoir/logo.png
-    alt: Memoir logo with the tagline "The Photo Library for the Visually Impaired".
-    caption: Memoir
   - src: ../../assets/work/memoir/launch-day.png
     alt: The Memoir team on stage holding an award check at SEP Launch Day.
     caption: Judges Award + Honorable Mention @ SEP Launch Day

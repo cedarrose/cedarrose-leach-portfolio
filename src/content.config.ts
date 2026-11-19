@@ -26,8 +26,13 @@ const work = defineCollection({
       tags: z.array(z.string()).default([]),
       supervisor: z.string().optional(),
       funding: z.array(z.object({ name: z.string(), url: z.url().optional() })).default([]),
-      awards: z.array(z.string()).default([]),
-      links: z.array(z.object({ label: z.string(), url: z.string() })).default([]),
+      // Shown as a row of starred awards under the title.
+      awards: z.array(z.object({ title: z.string(), detail: z.string().optional() })).default([]),
+      links: z
+        .array(z.object({ label: z.string(), url: z.string(), icon: z.enum(['instagram', 'mail']).optional() }))
+        .default([]),
+      // An image (like a logo) shown in place of the title text.
+      titleImage: z.object({ src: image(), alt: z.string() }).optional(),
       // Papers, abstracts and posters. These are also collected into the
       // Publications list on the home page.
       publications: z

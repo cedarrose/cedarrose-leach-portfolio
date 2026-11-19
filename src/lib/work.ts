@@ -63,7 +63,7 @@ export function workToMarkdown(w: Work, headingLevel = 1): string {
   lines.push(`- Page: ${absolute(workUrl(w))}`);
   lines.push('', `> ${d.summary}`, '');
   if (d.awards.length) {
-    lines.push('Awards:', ...d.awards.map((a) => `- ${a}`), '');
+    lines.push('Awards:', ...d.awards.map((a) => `- ${a.title}${a.detail ? `, ${a.detail}` : ''}`), '');
   }
   if (d.media.length) {
     lines.push('Media coverage:', ...d.media.map((m) => `- [${m.title}](${m.url}) (${m.source}, ${m.date})`), '');

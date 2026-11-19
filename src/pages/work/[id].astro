@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import MediaSection from '../../components/MediaSection.astro';
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
@@ -36,7 +37,7 @@ const jsonLd: object[] = [
     keywords: d.tags.join(', '),
     dateCreated: d.start,
     sourceOrganization: { '@type': 'Organization', name: d.org, ...(d.orgUrl ? { url: d.orgUrl } : {}) },
-    ...(d.awards.length ? { award: d.awards } : {}),
+    ...(d.awards.length ? { award: d.awards.map((a) => (a.detail ? `${a.title}, ${a.detail}` : a.title)) } : {}),
   },
   ...d.publications.map((p) => ({
     '@type': p.kind === 'Journal article' ? 'ScholarlyArticle' : 'CreativeWork',
@@ -78,7 +79,16 @@ const jsonLd: object[] = [
   <article class="wrap project">
     <header class="project-head">
       <p class="meta when"><time datetime={d.start}>{formatRange(d.start, d.end)}</time></p>
-      <h1>{d.title}</h1>
+      {
+        d.titleImage ? (
+          <h1 class="title-image">
+            <span class="visually-hidden">{d.title}</span>
+            <Image src={d.titleImage.src} alt="" widths={[360, 720]} sizes="22rem" loading="eager" />
+          </h1>
+        ) : (
+          <h1>{d.title}</h1>
+        )
+      }
       <p class="who">
         <span>{d.role}</span>
         <span>{d.orgUrl ? <a href={d.orgUrl}>{d.org}</a> : d.org}</span>
@@ -86,7 +96,37 @@ const jsonLd: object[] = [
     </header>
 
     {
-      (d.supervisor || d.funding.length > 0 || d.awards.length > 0 || d.links.length > 0) && (
+      d.awards.length > 0 && (
+        <section class="awards" aria-label="Awards">
+          <ul>
+            {d.awards.map((a) => (
+              <li>
+                <svg class="star" viewBox="0 0 9 9" width="18" height="18" shape-rendering="crispEdges" aria-hidden="true">
+                  {[
+                    '....x....',
+                    '....x....',
+                    '...xxx...',
+                    'xxxxxxxxx',
+                    '.xxxxxxx.',
+                    '..xxxxx..',
+                    '..xxxxx..',
+                    '.xxx.xxx.',
+                    '.xx...xx.',
+                  ].flatMap((row, y) =>
+                    [...row].map((c, x) => (c === 'x' ? <rect x={x} y={y} width="1" height="1" /> : null)),
+                  )}
+                </svg>
+                <span class="award-title">{a.title}</span>
+                {a.detail && <span class="award-detail">{a.detail}</span>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      (d.supervisor || d.funding.length > 0 || d.links.length > 0) && (
         <dl class="facts">
           {d.supervisor && (
             <div>
@@ -106,18 +146,6 @@ const jsonLd: object[] = [
               </dd>
             </div>
           )}
-          {d.awards.length > 0 && (
-            <div>
-              <dt>Recognition</dt>
-              <dd>
-                <ul>
-                  {d.awards.map((a) => (
-                    <li>{a}</li>
-                  ))}
-                </ul>
-              </dd>
-            </div>
-          )}
           {d.links.length > 0 && (
             <div>
               <dt>Links</dt>
@@ -125,7 +153,21 @@ const jsonLd: object[] = [
                 <ul>
                   {d.links.map((l) => (
                     <li>
-                      <a href={l.url}>{l.label}</a>
+                      <a href={l.url} class:list={{ 'with-icon': l.icon }}>
+                        {l.icon === 'instagram' && (
+                          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+                            <path d="M2 5.5h3l1.2-2h3.6l1.2 2h3v8H2z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" />
+                            <circle cx="8" cy="9.3" r="2.4" fill="none" stroke="currentColor" stroke-width="1.3" />
+                          </svg>
+                        )}
+                        {l.icon === 'mail' && (
+                          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+                            <rect x="2" y="3.5" width="12" height="9" rx="1" fill="none" stroke="currentColor" stroke-width="1.3" />
+                            <path d="m2.5 4.5 5.5 4.5 5.5-4.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" />
+                          </svg>
+                        )}
+                        {l.label}
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -256,6 +298,67 @@ const jsonLd: object[] = [
   }
   .who a {
     color: inherit;
+  }
+
+  .title-image {
+    margin: 0.25rem 0 0;
+  }
+  .title-image :global(img) {
+    width: min(22rem, 80vw);
+    height: auto;
+  }
+
+  .awards ul {
+    list-style: none;
+    margin: 2.25rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+  .awards li {
+    display: grid;
+    align-content: start;
+    gap: 0.2rem;
+  }
+  .star {
+    fill: #f5892c;
+    margin-bottom: 0.45rem;
+  }
+  .award-title {
+    color: var(--award);
+    font-weight: 560;
+    font-size: 1.05rem;
+    line-height: 1.35;
+  }
+  .award-detail {
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+  @media (max-width: 40rem) {
+    .awards ul {
+      grid-template-columns: 1fr;
+      gap: 1.1rem;
+    }
+    .awards li {
+      grid-template-columns: 2rem 1fr;
+      column-gap: 0.5rem;
+    }
+    .star {
+      grid-row: span 2;
+      margin: 0.2rem 0 0;
+    }
+  }
+
+  .with-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .with-icon svg {
+    flex: none;
+    color: var(--muted);
   }
 
   .facts {
