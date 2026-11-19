@@ -1,5 +1,5 @@
 ---
-order: 8
+order: 9
 title: Boeing FPGA Intern
 org: Boeing Satellite Development Center
 orgUrl: https://www.boeing.com/
@@ -14,12 +14,8 @@ summary: Configured a Versal VCK190 FPGA with Vivado and Vitis, and won Boeing's
 tags: [FPGA, Vivado, Vitis, Verilog, Satellites]
 ---
 
-The Boeing Satellite Development Center in El Segundo, CA is a massive hub of achievement and inspiration. During my summer internship at Boeing, I found myself immersed in the heart of aerospace and innovation, touring the labs and warehouses that send such complex systems to space.
+During my high school internship at Boeing's Satellite Development Center in El Segundo, I worked on FPGA development with the Versal VCK190 board using Vivado and Vitis, gaining experience in design, simulation, synthesis, and implementation. This established a foundation I later expanded through Verilog coursework at USC. Exploring the facility's labs and learning from engineers gave me a broader view of satellite development.
 
-Here, I was surrounded by people of passion, expertise, and grit; I tried my best to take every opportunity to absorb their knowledge and insights.
-
-I undertook two main projects during my internship. My individual project focused on configuring a Field Programmable Gate Array (FPGA) using the Versal VCK190 board. This involved designing, simulating, synthesizing, and implementing FPGA scripts using Xilinx's Vivado and Vitis tools. This experience introduced me to the fundamentals of FPGA programming, a foundation I have since built upon by strengthening my Verilog skills through Digital Circuits courses at USC.
-
-I also participated in Boeing's LINC Innovation Challenge, where my team developed a concept for an interactive campus navigation system for Boeing employees and visitors. Advancing through three competitive rounds, our team ultimately won the challenge, judged by Boeing's Director of Human Resources and President of Commercial Satellite Systems.
+Alongside my technical work, I collaborated on an interactive campus navigation concept for Boeing employees and visitors. Our team advanced through three rounds and won Boeing's LINC Innovation Challenge.
 
 While on the topic of Boeing, my friends and I entered **Boeing's USC Freshman Design Challenge** last year, where we were tasked with optimizing the cost, drag, lift, and speed of a Boeing airplane by selecting aircraft subsystem components. **After pitching our system configuration, we ended up winning the challenge and taking home a model of the Boeing 737!**

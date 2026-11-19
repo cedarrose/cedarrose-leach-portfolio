@@ -1,5 +1,5 @@
 ---
-order: 9
+order: 8
 title: USC Makers
 org: USC Makers
 orgUrl: https://viterbimakers.usc.edu/

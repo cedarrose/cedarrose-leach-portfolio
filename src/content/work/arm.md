@@ -4,6 +4,9 @@ title: NPU Power Analysis and Architecture
 org: Arm
 orgUrl: https://www.arm.com/
 role: Power Analysis and Architecture Engineering Intern
+logo:
+  src: ../../assets/work/arm/logo.png
+  alt: Arm logo
 category: experience
 start: 2026-06
 end: 2026-08
