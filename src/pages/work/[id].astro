@@ -1,5 +1,5 @@
 ---
-import Carousel from '../../components/Carousel.astro';
+import MediaSection from '../../components/MediaSection.astro';
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { person, SITE_URL } from '../../site';
@@ -154,16 +154,7 @@ const jsonLd: object[] = [
       )
     }
 
-    {
-      d.photosFirst && d.gallery.length > 0 && (
-        <section class="gallery" aria-labelledby="gallery-title">
-          <h2 id="gallery-title">Photos and figures</h2>
-          <div class="breakout">
-            <Carousel items={d.gallery} label={`Photos and figures for ${d.title}`} />
-          </div>
-        </section>
-      )
-    }
+    {d.photosFirst && <MediaSection work={work} />}
 
     <div class="prose">
       <Content />
@@ -191,16 +182,7 @@ const jsonLd: object[] = [
       )
     }
 
-    {
-      !d.photosFirst && d.gallery.length > 0 && (
-        <section class="gallery" aria-labelledby="gallery-title">
-          <h2 id="gallery-title">Photos and figures</h2>
-          <div class="breakout">
-            <Carousel items={d.gallery} label={`Photos and figures for ${d.title}`} />
-          </div>
-        </section>
-      )
-    }
+    {!d.photosFirst && <MediaSection work={work} heading />}
 
     <nav class="pager" aria-label="More work">
       {
@@ -379,14 +361,11 @@ const jsonLd: object[] = [
       padding-top: 0;
     }
   }
-  .gallery {
-    margin-top: 3.5rem;
+  /* Media above the write-up runs close to the text. */
+  :global(.media.tight) + .prose {
+    margin-top: 1.75rem;
   }
-  .gallery + .prose {
-    margin-top: 3.5rem;
-  }
-  .pubs h2,
-  .gallery h2 {
+  .pubs h2 {
     font-size: 1.6rem;
     margin: 0 0 1.25rem;
   }
@@ -399,14 +378,6 @@ const jsonLd: object[] = [
   }
   .pubs p {
     margin: 0;
-  }
-
-  /* The carousel is wider than the text column, centered on it. */
-  .breakout {
-    position: relative;
-    left: 50%;
-    width: min(100vw, 64rem);
-    transform: translateX(-50%);
   }
 
   .pager {

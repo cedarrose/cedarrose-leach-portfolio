@@ -27,6 +27,7 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 - `src/components/WaferBackdrop.astro`: the line-drawn wafers in the margins.
 - `src/components/PixelBlob.astro`: the orange pixel blob who lives on the wafer,
   plus his props (`PROPS_BY_PAGE` picks which parts appear on which page).
+- `src/components/MediaSection.astro`: a project's article previews and photo carousel.
 - `src/components/Carousel.astro`: the photo carousel on project pages.
 - `src/styles/global.css`: colors, type, and shared styles.
 - `src/assets/`: images. Put new ones in `src/assets/work/<project-id>/`.
@@ -45,8 +46,10 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 4. Every gallery image needs real `alt` text describing what's in it. Add a `caption` when
    there's more to say.
 5. Papers, abstracts and posters go in `publications`; they appear on the project page.
-6. Gallery images appear in the photo carousel, in the order listed. The carousel
-   goes after the write-up, or before it if `photosFirst: true`.
+6. Gallery images appear in the photo carousel, in the order listed. Optional `media`
+   (articles about the work: title, source, date, url, image) show as preview cards
+   above the carousel. Media goes after the write-up under a "Photos and figures"
+   heading, or, with `photosFirst: true`, right before the write-up with no visible heading.
 7. Optional `skills` (name + detail) show as a table at the end of the write-up.
 
 The home page, project page, llms.txt, llms-full.txt, the Markdown copy, the sitemap

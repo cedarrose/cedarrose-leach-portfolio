@@ -46,6 +46,10 @@ const work = defineCollection({
       skills: z.array(z.object({ name: z.string(), detail: z.string() })).default([]),
       // Show the photos before the write-up instead of after it.
       photosFirst: z.boolean().default(false),
+      // Articles about the work, shown as preview cards above the photos.
+      media: z
+        .array(z.object({ title: z.string(), source: z.string(), date: z.string(), url: z.url(), image: image() }))
+        .default([]),
       gallery: z
         .array(z.object({ src: image(), alt: z.string(), caption: z.string().optional() }))
         .default([]),

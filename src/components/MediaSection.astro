@@ -1,0 +1,112 @@
+---
+/**
+ * A project's media: article previews (if any) followed by the photo carousel.
+ * When it sits above the write-up, its heading is visually hidden so the media
+ * runs straight into the text; it's still there for screen readers and agents.
+ */
+import { Image } from 'astro:assets';
+import Carousel from './Carousel.astro';
+import type { Work } from '../lib/work';
+
+interface Props {
+  work: Work;
+  /** Show a visible "Photos and figures" heading (used when media comes after the text). */
+  heading?: boolean;
+}
+const { work, heading = false } = Astro.props;
+const d = work.data;
+const id = `media-${work.id}`;
+---
+
+{
+  (d.media.length > 0 || d.gallery.length > 0) && (
+    <section class:list={['media', { tight: !heading }]} aria-labelledby={id}>
+      <h2 id={id} class:list={{ 'visually-hidden': !heading }}>
+        {d.media.length > 0 ? 'Media' : 'Photos and figures'}
+      </h2>
+
+      {d.media.length > 0 && (
+        <ul class="articles">
+          {d.media.map((m) => (
+            <li>
+              <a href={m.url} class="article">
+                <Image src={m.image} alt="" widths={[400, 640]} sizes="(max-width: 40rem) 90vw, 22rem" />
+                <span class="title">{m.title}</span>
+                <span class="meta">
+                  {m.source}, {m.date}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {d.gallery.length > 0 && (
+        <div class="breakout">
+          <Carousel items={d.gallery} label={`Photos and figures for ${d.title}`} />
+        </div>
+      )}
+    </section>
+  )
+}
+
+<style>
+  .media {
+    margin-top: 3.5rem;
+  }
+  .media.tight {
+    margin-top: 2.5rem;
+  }
+  h2 {
+    font-size: 1.6rem;
+    margin: 0 0 1.25rem;
+  }
+
+  .articles {
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+  .article {
+    display: grid;
+    gap: 0.35rem;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .article :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
+    margin-bottom: 0.4rem;
+    border: 1px solid var(--rule);
+  }
+  .article .title {
+    font-size: 1.05rem;
+    line-height: 1.4;
+  }
+  .article:hover .title,
+  .article:focus-visible .title {
+    color: var(--maroon);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+  }
+
+  /* The carousel is wider than the text column, centered on it. */
+  .breakout {
+    position: relative;
+    left: 50%;
+    width: min(100vw, 64rem);
+    transform: translateX(-50%);
+  }
+
+  @media (max-width: 40rem) {
+    .articles {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

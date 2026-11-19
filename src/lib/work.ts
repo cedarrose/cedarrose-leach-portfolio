@@ -65,6 +65,9 @@ export function workToMarkdown(w: Work, headingLevel = 1): string {
   if (d.awards.length) {
     lines.push('Awards:', ...d.awards.map((a) => `- ${a}`), '');
   }
+  if (d.media.length) {
+    lines.push('Media coverage:', ...d.media.map((m) => `- [${m.title}](${m.url}) (${m.source}, ${m.date})`), '');
+  }
   if (d.links.length) {
     lines.push('Links:', ...d.links.map((l) => `- [${l.label}](${absolute(l.url)})`), '');
   }

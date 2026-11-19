@@ -9,11 +9,18 @@ start: 2024-06
 end: 2024-07
 summary: Member of the first Microelectronics Commons Scholars cohort; trained and certified in cleanroom fabrication, then recalibrated the lab's PECVD deposition rate.
 tags: [Cleanroom fabrication, Photolithography, Deposition, Etching, Metrology, PECVD]
-links:
-  - label: "Undergraduate Microelectronics Commons Scholars Program Brings the Textbook to Life in the Cleanroom (USC Viterbi School of Engineering)"
+photosFirst: true
+media:
+  - title: Undergraduate Microelectronics Commons Scholars Program Brings the Textbook to Life in the Cleanroom
+    source: USC Viterbi School of Engineering
+    date: Aug 23, 2024
     url: https://viterbischool.usc.edu/news/2024/10/undergraduate-microelectronics-commons-scholars-program-brings-the-textbook-to-life-in-the-cleanroom/
-  - label: "California DREAMS Offers IEEE-certified Cleanroom Microcredentials (USC Information Sciences Institute)"
+    image: ../../assets/work/nanofabrication/viterbi-article.webp
+  - title: California DREAMS Offers IEEE-certified Cleanroom Microcredentials
+    source: USC Information Sciences Institute
+    date: Aug 25, 2024
     url: https://www.isi.edu/news/72913/california-dreams-offers-ieee-certified-cleanroom-microcredentials/
+    image: ../../assets/work/nanofabrication/isi-article.png
 gallery:
   - src: ../../assets/work/nanofabrication/cleanroom.jpeg
     alt: The photolithography area of a cleanroom, lit in yellow light.
