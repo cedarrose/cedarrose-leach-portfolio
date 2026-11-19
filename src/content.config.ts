@@ -16,6 +16,8 @@ const work = defineCollection({
       title: z.string(),
       // Where the work happened: company, lab, club or startup.
       org: z.string(),
+      // Shorter name for the home page list (defaults to org).
+      orgShort: z.string().optional(),
       orgUrl: z.url().optional(),
       role: z.string(),
       category: z.enum(['experience', 'research', 'building', 'mentoring']),

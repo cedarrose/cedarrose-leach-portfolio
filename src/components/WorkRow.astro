@@ -8,7 +8,7 @@ const { work } = Astro.props;
 const d = work.data;
 // The org without a trailing ", USC" keeps rows to one line. It's left out
 // when the title starts with it (e.g. "Boeing FPGA Intern" at Boeing).
-const org = d.org.replace(/, USC$/, '');
+const org = d.orgShort ?? d.org.replace(/, USC$/, '');
 const firstWord = org.split(/\s+/)[0].toLowerCase();
 const showOrg = !d.title.toLowerCase().startsWith(firstWord);
 ---

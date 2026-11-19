@@ -44,7 +44,7 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 3. Write `summary` as one sentence. It isn't shown on the page; it's the page's meta
    description and appears in llms.txt. `role` is the subtitle shown under the title.
    The home page shows only the years, title and organization (the organization is
-   hidden when the title starts with it).
+   hidden when the title starts with it). `orgShort` sets a shorter name for that list.
 4. Every gallery image needs real `alt` text describing what's in it. Add a `caption` when
    there's more to say.
 5. Papers, abstracts and posters go in `publications`; they appear on the project page.
