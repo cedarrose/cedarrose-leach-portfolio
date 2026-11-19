@@ -31,6 +31,8 @@ const work = defineCollection({
       links: z
         .array(z.object({ label: z.string(), url: z.string(), icon: z.enum(['instagram', 'mail']).optional() }))
         .default([]),
+      // A company logo shown above the title.
+      logo: z.object({ src: image(), alt: z.string() }).optional(),
       // An image (like a logo) shown in place of the title text.
       titleImage: z.object({ src: image(), alt: z.string() }).optional(),
       // Papers, abstracts and posters. These are also collected into the

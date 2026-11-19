@@ -3,7 +3,10 @@ order: 8
 title: Boeing FPGA Intern
 org: Boeing Satellite Development Center
 orgUrl: https://www.boeing.com/
-role: FPGAs, Satellites & Systems, Innovation Challenge
+role: FPGAs, Satellites & Systems, Winner of Innovation Challenge
+logo:
+  src: ../../assets/work/boeing/logo.png
+  alt: Boeing logo
 category: experience
 start: 2022-06
 end: 2022-08

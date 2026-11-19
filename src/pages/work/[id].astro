@@ -78,6 +78,7 @@ const jsonLd: object[] = [
 
   <article class="wrap project">
     <header class="project-head">
+      {d.logo && <Image class="logo" src={d.logo.src} alt={d.logo.alt} widths={[240, 480]} sizes="12rem" loading="eager" />}
       <p class="meta when"><time datetime={d.start}>{formatRange(d.start, d.end)}</time></p>
       {
         d.titleImage ? (
@@ -300,6 +301,12 @@ const jsonLd: object[] = [
     color: inherit;
   }
 
+  .project-head :global(.logo) {
+    display: block;
+    width: auto;
+    height: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
   .title-image {
     margin: 0.25rem 0 0;
   }
@@ -409,6 +416,45 @@ const jsonLd: object[] = [
   }
   .prose :global(li) {
     margin-bottom: 0.35rem;
+  }
+  /* Rows of side-by-side photos inside a write-up (see figures-plugin.ts). */
+  .prose :global(.figure-row) {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+    gap: 1rem;
+    align-items: start;
+    margin: 1.25rem 0 2rem;
+  }
+  .prose :global(.figure-row[data-count='1']) {
+    --cols: 1;
+  }
+  .prose :global(.figure-row[data-count='3']) {
+    --cols: 3;
+  }
+  .prose :global(.figure-row figure) {
+    margin: 0;
+  }
+  .prose :global(.figure-row img) {
+    width: 100%;
+    height: 14rem;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+  .prose :global(.figure-row figcaption) {
+    margin-top: 0.45rem;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+  @media (max-width: 40rem) {
+    .prose :global(.figure-row) {
+      --cols: 1;
+      grid-template-columns: 1fr;
+    }
+    .prose :global(.figure-row img) {
+      height: auto;
+      max-height: 22rem;
+    }
   }
   .prose :global(blockquote) {
     margin: 0 0 1.1rem;
