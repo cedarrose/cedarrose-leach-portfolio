@@ -52,8 +52,8 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
    (articles about the work: title, source, date, url, image) show as preview cards
    above the carousel. Media goes after the write-up, or right before it with
    `photosFirst: true`. There's no visible heading either way (one stays in the HTML).
-   `autoScrollPhotos: true` makes the carousel step through its photos as the page
-   scrolls (once it's half in view); visitors can still use the arrows, which pauses it.
+   `autoScrollPhotos: true` makes the carousel glide sideways in proportion to the page
+   scroll (once it's half in view); visitors can still use the arrows, which pauses it.
 7. Optional `skills` (name + detail) show as a table at the end of the write-up.
 8. Optional `awards` (title + detail) show as a row of pixel-starred awards under the
    title. Optional `titleImage` (src + alt) replaces the title text with an image, like
