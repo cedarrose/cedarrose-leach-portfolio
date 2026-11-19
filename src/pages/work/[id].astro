@@ -78,8 +78,10 @@ const jsonLd: object[] = [
 
   <article class="wrap project">
     <header class="project-head">
-      {d.logo && <Image class="logo" src={d.logo.src} alt={d.logo.alt} widths={[240, 480]} sizes="12rem" loading="eager" />}
-      <p class="meta when"><time datetime={d.start}>{formatRange(d.start, d.end)}</time></p>
+      <div class="head-top">
+        <p class="meta when"><time datetime={d.start}>{formatRange(d.start, d.end)}</time></p>
+        {d.logo && <Image class="logo" src={d.logo.src} alt={d.logo.alt} widths={[240, 480]} sizes="10rem" loading="eager" />}
+      </div>
       {
         d.titleImage ? (
           <h1 class="title-image">
@@ -199,7 +201,7 @@ const jsonLd: object[] = [
 
     {d.photosFirst && <MediaSection work={work} />}
 
-    <div class="prose">
+    <div class:list={['prose', { 'accent-headings': d.accentHeadings }]}>
       <Content />
     </div>
 
@@ -225,7 +227,7 @@ const jsonLd: object[] = [
       )
     }
 
-    {!d.photosFirst && <MediaSection work={work} heading />}
+    {!d.photosFirst && <MediaSection work={work} />}
 
     <nav class="pager" aria-label="More work">
       {
@@ -301,11 +303,23 @@ const jsonLd: object[] = [
     color: inherit;
   }
 
+  /* Date on the left, company logo (if any) on the right. */
+  .head-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin: 0 0 0.9rem;
+  }
+  .head-top .when {
+    margin: 0;
+  }
   .project-head :global(.logo) {
     display: block;
     width: auto;
-    height: 2.5rem;
-    margin-bottom: 1.5rem;
+    height: auto;
+    max-width: 9rem;
+    max-height: 3.5rem;
   }
   .title-image {
     margin: 0.25rem 0 0;
@@ -455,6 +469,10 @@ const jsonLd: object[] = [
       height: auto;
       max-height: 22rem;
     }
+  }
+  .accent-headings :global(h3) {
+    color: var(--award);
+    font-weight: 600;
   }
   .prose :global(blockquote) {
     margin: 0 0 1.1rem;

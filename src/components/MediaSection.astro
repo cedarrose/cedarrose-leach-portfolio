@@ -10,18 +10,16 @@ import type { Work } from '../lib/work';
 
 interface Props {
   work: Work;
-  /** Show a visible "Photos and figures" heading (used when media comes after the text). */
-  heading?: boolean;
 }
-const { work, heading = false } = Astro.props;
+const { work } = Astro.props;
 const d = work.data;
 const id = `media-${work.id}`;
 ---
 
 {
   (d.media.length > 0 || d.gallery.length > 0) && (
-    <section class:list={['media', { tight: !heading }]} aria-labelledby={id}>
-      <h2 id={id} class:list={{ 'visually-hidden': !heading }}>
+    <section class:list={['media', { tight: d.photosFirst }]} aria-labelledby={id}>
+      <h2 id={id} class="visually-hidden">
         {d.media.length > 0 ? 'Media' : 'Photos and figures'}
       </h2>
 

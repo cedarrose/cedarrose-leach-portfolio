@@ -48,13 +48,14 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 5. Papers, abstracts and posters go in `publications`; they appear on the project page.
 6. Gallery images appear in the photo carousel, in the order listed. Optional `media`
    (articles about the work: title, source, date, url, image) show as preview cards
-   above the carousel. Media goes after the write-up under a "Photos and figures"
-   heading, or, with `photosFirst: true`, right before the write-up with no visible heading.
+   above the carousel. Media goes after the write-up, or right before it with
+   `photosFirst: true`. There's no visible heading either way (one stays in the HTML).
 7. Optional `skills` (name + detail) show as a table at the end of the write-up.
 8. Optional `awards` (title + detail) show as a row of pixel-starred awards under the
    title. Optional `titleImage` (src + alt) replaces the title text with an image, like
    a logo; the title stays in the HTML for agents. Optional `logo` (src + alt) shows a
-   small company logo above the date. Links can take `icon: instagram` or `icon: mail`.
+   small logo on the right, in line with the date. `accentHeadings: true` makes the
+   write-up's `###` sub-headings bold orange (used on USC Makers). Links can take `icon: instagram` or `icon: mail`.
 9. To put photos inside a write-up (for example under each sub-project), write a
    paragraph of only Markdown images: `![alt text](../../assets/work/<id>/x.jpeg "Caption")`,
    one per line. They render as a side-by-side row of captioned photos

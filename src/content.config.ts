@@ -51,6 +51,8 @@ const work = defineCollection({
         .default([]),
       // Skills shown as a table at the end of the write-up.
       skills: z.array(z.object({ name: z.string(), detail: z.string() })).default([]),
+      // Bold orange sub-headings (### headings) in the write-up.
+      accentHeadings: z.boolean().default(false),
       // Show the photos before the write-up instead of after it.
       photosFirst: z.boolean().default(false),
       // Articles about the work, shown as preview cards above the photos.

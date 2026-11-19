@@ -4,6 +4,10 @@ title: USC Makers
 org: USC Makers
 orgUrl: https://viterbimakers.usc.edu/
 role: University Electrical Engineering Club
+logo:
+  src: ../../assets/work/usc-makers/logo.png
+  alt: USC Makers logo, a rocket launching from concentric circles with circuit traces
+accentHeadings: true
 category: building
 start: 2023-09
 end: present
