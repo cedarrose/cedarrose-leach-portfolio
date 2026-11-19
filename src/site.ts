@@ -24,7 +24,7 @@ export const person = {
   // One short line shown under the name on the home page.
   bio: 'Building hardware for AI workloads and neural systems, from the architecture to the fab.',
   description:
-    'Cedar Rose Leach is an Electrical and Computer Engineering student at USC (B.S. and M.S., Class of 2027) focused on power and computer architecture for AI hardware: gate-level power analysis, NPU architecture and chip design, from the architecture down to fabrication.',
+    'Cedar Rose Leach is an Electrical and Computer Engineering student at USC designing hardware for AI and neural systems.',
   knowsAbout: [
     'Power analysis',
     'Power architecture',
