@@ -31,6 +31,7 @@ publications:
     date: "2025"
     url: /files/neural-probe-poster.pdf
     kind: Poster
+autoScrollPhotos: true
 gallery:
   - src: ../../assets/work/neural-probe/poster.png
     alt: Research poster titled Development and Characterization of a High-Density Flexible Neural Recording Probe, with sections on introduction, development and characterization.

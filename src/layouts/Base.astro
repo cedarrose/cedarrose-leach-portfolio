@@ -63,7 +63,9 @@ const year = new Date().getFullYear();
     </main>
     <footer class="wrap site-footer meta">
       <p>© {year} {person.name}</p>
-      <p><a href="/llms.txt">Notes for agents</a></p>
+      <!-- For AI agents only: kept in the HTML, hidden from sighted visitors,
+           screen readers and keyboard focus. -->
+      <a class="visually-hidden" href="/llms.txt" aria-hidden="true" tabindex="-1">Notes for AI agents: /llms.txt (summary) and /llms-full.txt (full text)</a>
     </footer>
     <Doodles page={page}>
       <PixelBlob />

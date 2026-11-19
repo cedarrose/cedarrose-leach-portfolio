@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { person } from '../site';
+import { person, agentNotes } from '../site';
 import { getWorkByCategory, getPublications, formatRange, workUrl, absolute } from '../lib/work';
 
 // Short Markdown summary of the whole site for AI agents (https://llmstxt.org).
@@ -12,7 +12,12 @@ export const GET: APIRoute = async () => {
     '',
     `> ${person.description}`,
     '',
-    person.bio,
+    agentNotes.focus,
+    '',
+    '## Focus areas',
+    '',
+    ...agentNotes.areas.map((a) => `- ${a.area}: ${a.detail}`),
+    `- Tools: ${agentNotes.tools}`,
     '',
     '## Contact',
     '',

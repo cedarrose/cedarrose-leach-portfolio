@@ -14,11 +14,13 @@ import type { ImageMetadata } from 'astro';
 interface Props {
   items: { src: ImageMetadata; alt: string; caption?: string }[];
   label: string;
+  /** Advance through the photos as the page scrolls, once the carousel is half in view. */
+  followScroll?: boolean;
 }
-const { items, label } = Astro.props;
+const { items, label, followScroll = false } = Astro.props;
 ---
 
-<div class="carousel" data-carousel>
+<div class="carousel" data-carousel data-follow-scroll={followScroll ? '' : undefined}>
   <div class="track" tabindex="0" role="group" aria-label={label}>
     {
       items.map((g, i) => (
@@ -231,6 +233,46 @@ const { items, label } = Astro.props;
     // Images change the slide widths as they load; keep the active one centered.
     for (const img of root.querySelectorAll('img')) {
       if (!img.complete) img.addEventListener('load', () => go(active, false), { once: true });
+    }
+
+    // Scroll-linked mode: as the page scrolls past the carousel, step through
+    // the photos. It starts once the carousel is half in view and finishes by
+    // the time it reaches the top quarter of the screen (or the page ends).
+    // If someone uses the carousel directly, it stops following the page until
+    // the carousel has left the screen.
+    if (root.hasAttribute('data-follow-scroll') && !reduce && slides.length > 1) {
+      let manual = false;
+      for (const type of ['pointerdown', 'wheel', 'touchstart', 'keydown']) {
+        root.addEventListener(type, () => (manual = true), { passive: true });
+      }
+      let pending = false;
+      const follow = () => {
+        pending = false;
+        const r = track.getBoundingClientRect();
+        const vh = innerHeight;
+        if (r.bottom < 0 || r.top > vh) {
+          manual = false; // off screen: hand control back to the page scroll
+          return;
+        }
+        if (manual) return;
+        const center = r.top + scrollY + r.height / 2;
+        const start = center - vh; // carousel's middle reaches the bottom of the screen
+        const maxScroll = document.documentElement.scrollHeight - vh;
+        let end = Math.min(center - vh * 0.25, maxScroll);
+        if (end - start < 200) end = start + 200;
+        const p = Math.min(1, Math.max(0, (scrollY - start) / (end - start)));
+        const target = Math.round(p * (slides.length - 1));
+        if (target !== active) go(target);
+      };
+      addEventListener(
+        'scroll',
+        () => {
+          if (pending) return;
+          pending = true;
+          requestAnimationFrame(follow);
+        },
+        { passive: true },
+      );
     }
 
     root.classList.add('ready');

@@ -16,7 +16,9 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
 
 - `src/content/work/*.md`: one file per project. The frontmatter schema is in
   `src/content.config.ts`. The body is the full write-up.
-- `src/site.ts`: name, one-line bio, contact links, and `SITE_URL`
+- `src/site.ts`: name, one-line bio, contact links, `agentNotes` (the focus areas
+  written only for agents in llms.txt: power analysis, computer architecture, chip
+  design), and `SITE_URL`
   (taken from Vercel's production domain automatically; override with a `SITE_URL` env var).
 - `src/pages/index.astro`: home page (hero, then one list linking to every project).
 - `src/pages/work/[id].astro`: the page for each project.
@@ -50,6 +52,8 @@ all of its text in it. Deployed on Vercel (framework preset: Astro, no settings 
    (articles about the work: title, source, date, url, image) show as preview cards
    above the carousel. Media goes after the write-up, or right before it with
    `photosFirst: true`. There's no visible heading either way (one stays in the HTML).
+   `autoScrollPhotos: true` makes the carousel step through its photos as the page
+   scrolls (once it's half in view); visitors can still use the arrows, which pauses it.
 7. Optional `skills` (name + detail) show as a table at the end of the write-up.
 8. Optional `awards` (title + detail) show as a row of pixel-starred awards under the
    title. Optional `titleImage` (src + alt) replaces the title text with an image, like

@@ -26,6 +26,7 @@ links:
   - label: contact.memoirphotos@gmail.com
     url: mailto:contact.memoirphotos@gmail.com
     icon: mail
+autoScrollPhotos: true
 gallery:
   - src: ../../assets/work/memoir/launch-day.png
     alt: The Memoir team on stage holding an award check at SEP Launch Day.

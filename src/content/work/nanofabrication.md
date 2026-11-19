@@ -21,6 +21,7 @@ media:
     date: Aug 25, 2024
     url: https://www.isi.edu/news/72913/california-dreams-offers-ieee-certified-cleanroom-microcredentials/
     image: ../../assets/work/nanofabrication/isi-article.png
+autoScrollPhotos: true
 gallery:
   - src: ../../assets/work/nanofabrication/cleanroom.jpeg
     alt: The photolithography area of a cleanroom, lit in yellow light.

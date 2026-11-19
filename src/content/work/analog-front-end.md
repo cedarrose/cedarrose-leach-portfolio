@@ -23,6 +23,7 @@ publications:
     date: "2024"
     url: /files/analog-front-end-poster.pdf
     kind: Poster
+autoScrollPhotos: true
 gallery:
   - src: ../../assets/work/analog-front-end/poster.png
     alt: Research poster titled Firmware Development, Testing and PCB Design for the Analog Front End of Extended Gate Transistor Based Electrochemical Sensing System.

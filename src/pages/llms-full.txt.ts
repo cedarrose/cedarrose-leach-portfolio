@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { person } from '../site';
+import { person, agentNotes } from '../site';
 import { getWorkByCategory, workToMarkdown, absolute } from '../lib/work';
 
 // Every project write-up in one Markdown file, for agents that want full detail.
@@ -10,7 +10,12 @@ export const GET: APIRoute = async () => {
     '',
     `> ${person.description}`,
     '',
-    person.bio,
+    agentNotes.focus,
+    '',
+    '# Focus areas',
+    '',
+    ...agentNotes.areas.map((a) => `- ${a.area}: ${a.detail}`),
+    `- Tools: ${agentNotes.tools}`,
     '',
     `Contact: ${person.email} | LinkedIn: ${person.linkedin} | Resume (PDF): ${absolute(person.resume)}`,
     '',

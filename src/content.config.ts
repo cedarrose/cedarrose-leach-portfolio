@@ -55,6 +55,8 @@ const work = defineCollection({
       hideByline: z.boolean().default(false),
       // Bold orange sub-headings (### headings) in the write-up.
       accentHeadings: z.boolean().default(false),
+      // The photo carousel steps through its photos as the page scrolls.
+      autoScrollPhotos: z.boolean().default(false),
       // Show the photos before the write-up instead of after it.
       photosFirst: z.boolean().default(false),
       // Articles about the work, shown as preview cards above the photos.

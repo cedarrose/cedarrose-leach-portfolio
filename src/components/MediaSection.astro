@@ -41,7 +41,7 @@ const id = `media-${work.id}`;
 
       {d.gallery.length > 0 && (
         <div class="breakout">
-          <Carousel items={d.gallery} label={`Photos and figures for ${d.title}`} />
+          <Carousel items={d.gallery} label={`Photos and figures for ${d.title}`} followScroll={d.autoScrollPhotos} />
         </div>
       )}
     </section>
