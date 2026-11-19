@@ -4,6 +4,9 @@ title: Microelectronics EBL Process Engineering
 org: Northrop Grumman
 orgUrl: https://www.northropgrumman.com/
 role: Electron Beam Lithography & Microelectronics Internship
+logo:
+  src: ../../assets/work/northrop-grumman/logo.png
+  alt: Northrop Grumman logo
 category: experience
 start: 2025-06
 end: 2025-08
