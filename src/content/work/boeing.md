@@ -18,4 +18,4 @@ During my high school internship at Boeing's Satellite Development Center in El 
 
 Alongside my technical work, I collaborated on an interactive campus navigation concept for Boeing employees and visitors. Our team advanced through three rounds and won Boeing's LINC Innovation Challenge.
 
-While on the topic of Boeing, my friends and I entered **Boeing's USC Freshman Design Challenge** last year, where we were tasked with optimizing the cost, drag, lift, and speed of a Boeing airplane by selecting aircraft subsystem components. **After pitching our system configuration, we ended up winning the challenge and taking home a model of the Boeing 737!**
+While on the topic of Boeing, my friends and I entered **Boeing's USC Freshman Design Challenge** during freshman year, where we were tasked with optimizing the cost, drag, lift, and speed of a Boeing airplane by selecting aircraft subsystem components. **After pitching our system configuration, we ended up winning the challenge and taking home a model of the Boeing 737!**
