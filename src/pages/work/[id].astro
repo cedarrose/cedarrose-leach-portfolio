@@ -77,11 +77,9 @@ const jsonLd: object[] = [
   </header>
 
   <article class="wrap project">
-    <header class="project-head">
-      <div class="head-top">
-        <p class="meta when"><time datetime={d.start}>{formatRange(d.start, d.end)}</time></p>
-        {d.logo && <Image class="logo" src={d.logo.src} alt={d.logo.alt} widths={[240, 480]} sizes="10rem" loading="eager" />}
-      </div>
+    <header class:list={['project-head', { 'has-logo': d.logo }]}>
+      {d.logo && <Image class="logo" src={d.logo.src} alt={d.logo.alt} widths={[240, 480]} sizes="10rem" loading="eager" />}
+      <p class="meta when"><time datetime={d.start}>{formatRange(d.start, d.end)}</time></p>
       {
         d.titleImage ? (
           <h1 class="title-image">
@@ -303,23 +301,38 @@ const jsonLd: object[] = [
     color: inherit;
   }
 
-  /* Date on the left, company logo (if any) on the right. */
-  .head-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    margin: 0 0 0.9rem;
-  }
-  .head-top .when {
-    margin: 0;
+  /* Company logo at the top right. It's taken out of the flow so it never
+     changes the spacing between the date and the title, and the title keeps
+     clear of it. */
+  .project-head {
+    position: relative;
   }
   .project-head :global(.logo) {
+    position: absolute;
+    right: 0;
+    top: clamp(2.5rem, 8vw, 5rem);
     display: block;
     width: auto;
     height: auto;
     max-width: 9rem;
     max-height: 3.5rem;
+  }
+  .has-logo h1 {
+    padding-right: 10.5rem;
+  }
+  @media (max-width: 40rem) {
+    /* No room beside the title on phones, so the logo shrinks to fit the date's line. */
+    .project-head :global(.logo) {
+      max-width: 5.5rem;
+      max-height: 2rem;
+    }
+    .has-logo h1 {
+      padding-right: 0;
+    }
+    .has-logo .when {
+      padding-right: 6.5rem;
+      min-height: 2rem;
+    }
   }
   .title-image {
     margin: 0.25rem 0 0;
