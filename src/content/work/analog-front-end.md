@@ -1,6 +1,6 @@
 ---
 order: 6
-title: Analog Front End of Electrochemical Sensing System
+title: Electrochemical Sensing System
 org: Khan Lab, USC
 orgUrl: https://khan.usc.edu/
 role: Firmware Development, Testing and PCB Design

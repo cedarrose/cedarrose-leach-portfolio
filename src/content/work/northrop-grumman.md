@@ -1,6 +1,6 @@
 ---
 order: 3
-title: Microelectronics EBL Process Engineering
+title: Microelectronics Process Engineering
 org: Northrop Grumman
 orgUrl: https://www.northropgrumman.com/
 role: Electron Beam Lithography & Microelectronics Internship
