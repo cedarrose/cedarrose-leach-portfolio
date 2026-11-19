@@ -22,7 +22,7 @@ export const person = {
   linkedin: 'https://www.linkedin.com/in/cedar-rose-leach',
   resume: '/files/cedar-rose-leach-resume.pdf',
   // One short line shown under the name on the home page.
-  bio: 'Building hardware for AI, robotics and neural systems, from the cleanroom to the circuit board.',
+  bio: 'Building hardware for AI workloads and neural systems, from the architecture to the fab.',
   description:
     'Cedar Rose Leach is an Electrical and Computer Engineering student at USC (Class of 2027) building hardware for AI, robotics and neural systems: neural interfaces, wearable sensors, microfabrication and PCB design. Co-founder of Memoir Photos.',
   knowsAbout: [
